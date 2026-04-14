@@ -20,7 +20,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const PUBLIC_PATHS = ["/signup", "/login", "/pricing"];
+const PUBLIC_PATHS = ["/signup", "/login", "/pricing", "/onboarding"];
 const TOKEN_KEY = "mm_token";
 const USER_KEY = "mm_user";
 
@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(USER_KEY, JSON.stringify(data.user));
     setToken(data.access_token);
     setUser(data.user);
-    router.push("/");
+    router.push("/onboarding");
   }, [router]);
 
   const login = useCallback(async (email: string, password: string) => {
