@@ -14,6 +14,7 @@ from backend.models.track_version import TrackVersion
 from backend.models.arrangement_section import ArrangementSection
 from backend.models.subscription import Subscription
 from backend.models.sample_library import SamplePack
+from backend.models.analytics import DailyMetric, EventLog
 
 __all__ = [
     "Base", "User", "Project", "Song", "SongVersion",
@@ -21,4 +22,5 @@ __all__ = [
     "RenderJob", "ExportJob",
     "StudioSession", "StudioTrack", "TrackVersion",
     "ArrangementSection", "Subscription", "SamplePack",
+    "DailyMetric", "EventLog",
 ]

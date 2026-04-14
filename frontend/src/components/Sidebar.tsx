@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Mic, Library, Wand2, User, Music, Settings, Layers } from "lucide-react";
+import { Mic, Library, Wand2, User, Music, Settings, Layers, BarChart3 } from "lucide-react";
 import type { ComponentType } from "react";
 
 interface NavItem {
@@ -16,6 +16,7 @@ const navItems: NavItem[] = [
   { label: "MMMM Studio", href: "/mmmm-studio", icon: Layers },
   { label: "Transform", href: "/transform", icon: Wand2 },
   { label: "Personas", href: "/personas", icon: User },
+  { label: "Analytics", href: "/analytics", icon: BarChart3 },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 

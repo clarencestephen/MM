@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.config import settings
-from backend.routes import projects, songs, upload, generate, transform, persona, export, jobs, studio, auth
+from backend.routes import projects, songs, upload, generate, transform, persona, export, jobs, studio, auth, analytics
 
 logging.basicConfig(
     level=logging.INFO if settings.debug else logging.WARNING,
@@ -65,6 +65,7 @@ app.include_router(export.router, prefix="/api")
 app.include_router(jobs.router, prefix="/api")
 app.include_router(studio.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
+app.include_router(analytics.router, prefix="/api")
 
 
 @app.get("/")
