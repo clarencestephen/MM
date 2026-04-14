@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Mic, Library, Wand2, User, Music, Settings, Layers, BarChart3 } from "lucide-react";
+import { Mic, Wand2, User, Settings, Layers, BarChart3, LogOut, Crown } from "lucide-react";
 import type { ComponentType } from "react";
+import { useAuth } from "@/lib/auth";
 
 interface NavItem {
   label: string;
@@ -22,6 +23,12 @@ const navItems: NavItem[] = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
+
+  // Don't show sidebar on auth pages
+  if (["/signup", "/login", "/pricing"].includes(pathname)) {
+    return null;
+  }
 
   return (
     <aside className="fixed inset-y-0 left-0 z-40 flex w-16 flex-col bg-black border-r border-[#0f0e0c]">
@@ -65,8 +72,46 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="flex items-center justify-center pb-4">
-        <span className="text-[8px] font-mono text-[#1c1b18]">0.3</span>
+      {/* User + Upgrade + Logout */}
+      <div className="flex flex-col items-center gap-1.5 pb-4">
+        {/* Upgrade to Pro */}
+        <Link
+          href="/pricing"
+          title="Upgrade to Pro"
+          className="group relative flex h-10 w-10 items-center justify-center rounded-lg text-[#FF6B35] transition hover:bg-[#FF6B35]/10"
+        >
+          <Crown className="h-[18px] w-[18px]" />
+          <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-md bg-[#111110] px-2.5 py-1 text-[10px] font-semibold text-[#FF6B35] opacity-0 shadow-xl transition-opacity group-hover:opacity-100">
+            Upgrade to Pro
+          </span>
+        </Link>
+
+        {/* User avatar */}
+        {user && (
+          <div className="group relative flex h-10 w-10 items-center justify-center">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#111110] border border-[#1c1b18] text-[10px] font-bold text-[#6B6560]">
+              {(user.display_name || user.email)[0].toUpperCase()}
+            </div>
+            <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-md bg-[#111110] px-2.5 py-1 text-[10px] font-semibold text-[#6B6560] opacity-0 shadow-xl transition-opacity group-hover:opacity-100">
+              {user.display_name || user.email}
+            </span>
+          </div>
+        )}
+
+        {/* Logout */}
+        <button
+          type="button"
+          onClick={logout}
+          title="Log out"
+          className="group relative flex h-10 w-10 items-center justify-center rounded-lg text-[#1c1b18] transition hover:text-[#6B6560]"
+        >
+          <LogOut className="h-[16px] w-[16px]" />
+          <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-md bg-[#111110] px-2.5 py-1 text-[10px] font-semibold text-[#6B6560] opacity-0 shadow-xl transition-opacity group-hover:opacity-100">
+            Log out
+          </span>
+        </button>
+
+        <span className="text-[8px] font-mono text-[#1c1b18]">0.4</span>
       </div>
     </aside>
   );

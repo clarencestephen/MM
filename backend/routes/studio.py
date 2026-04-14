@@ -41,6 +41,8 @@ def create_session(data: StudioSessionCreate, db: Session = Depends(get_db)):
     db.add(session)
     db.commit()
     db.refresh(session)
+    from backend.services.analytics_service import log_event
+    log_event(db, "session_create", metadata={"session_id": session.id, "genre": data.genre})
     return session
 
 
@@ -361,6 +363,9 @@ def convert_track(
     track.instrument_label = instrument_description
     db.commit()
     db.refresh(track)
+
+    from backend.services.analytics_service import log_event
+    log_event(db, "track_convert", metadata={"track_id": track_id, "instrument": instrument_description})
 
     return {"track_id": track_id, "instrument": instrument_description, "output_path": output}
 

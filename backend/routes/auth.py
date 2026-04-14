@@ -40,7 +40,9 @@ def signup(data: SignupRequest, db: Session = Depends(get_db)):
     """Create account. Required before using anything."""
     user = register_user(db, data.email, data.password, data.display_name)
     from backend.services.auth_service import create_access_token
+    from backend.services.analytics_service import log_event
     token = create_access_token(user.id, user.email)
+    log_event(db, "signup", user.id)
     return {
         "access_token": token,
         "token_type": "bearer",
@@ -52,6 +54,8 @@ def signup(data: SignupRequest, db: Session = Depends(get_db)):
 def login(data: LoginRequest, db: Session = Depends(get_db)):
     """Log in with email + password."""
     result = login_user(db, data.email, data.password)
+    from backend.services.analytics_service import log_event
+    log_event(db, "login", result["user"]["id"])
     return result
 
 
