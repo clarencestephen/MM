@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# Environment
+.env
+.env.local
+
+# Storage (audio files, model outputs)
+storage/beats/*
+storage/vocals/*
+storage/stems/*
+storage/exports/*
+storage/personas/*
+storage/cache/*
+!storage/*/.gitkeep
+
+# Model weights (downloaded at runtime)
+models/weights/
+*.pt
+*.pth
+*.onnx
+*.bin
+*.safetensors
+*.gguf
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+
+# Docker
+docker-compose.override.yml
+
+# Alembic
+alembic/versions/*.py
+!alembic/versions/.gitkeep
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log

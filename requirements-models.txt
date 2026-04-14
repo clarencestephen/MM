@@ -1,0 +1,29 @@
+# === ML model dependencies ===
+# Install these for full local model inference.
+# Core app runs without these (graceful fallback to stubs).
+#
+# FIRST install PyTorch with CUDA:
+#   pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121
+#
+# THEN install these:
+#   pip install -r requirements-models.txt
+
+# Source separation (GPU 1)
+demucs==4.0.1
+
+# TTS — local vocal generation via XTTS v2 (GPU 0)
+TTS==0.22.0
+
+# Voice conversion — zero-shot persona stylization (GPU 0)
+# THIS IS THE MOAT. Makes "your AI artist voice" real.
+seed-vc>=0.4.0
+
+# Transcription + alignment (GPU 1)
+# whisperx: pip install git+https://github.com/m-bain/whisperX.git
+# torchaudio forced_align is included with torchaudio (installed with torch)
+
+# Audio analysis
+librosa==0.10.2.post1
+
+# Voice conversion fallback (optional)
+# OpenVoice: pip install git+https://github.com/myshell-ai/OpenVoice.git
