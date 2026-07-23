@@ -32,6 +32,16 @@ class Settings(BaseSettings):
     azure_speech_key: str = ""
     azure_speech_region: str = "eastus"
 
+    # ElevenLabs (Pro-tier premium voice + Instant Voice Cloning).
+    # Read from /home/cs/.env via the env_file tuple below.
+    elevenlabs_api_key: str = ""
+    elevenlabs_default_voice_id: str = "21m00Tcm4TlvDq8ikWAM"  # Rachel — neutral default
+    elevenlabs_model_id: str = "eleven_multilingual_v2"
+
+    # WhisperX sidecar microservice (mm-whisper conda env on :8100).
+    # Runs locally on the same host — see scripts/run_whisper_service.sh.
+    whisper_service_url: str = "http://localhost:8100"
+
     @property
     def storage_dir(self) -> Path:
         p = Path(self.storage_path)
@@ -97,7 +107,13 @@ class Settings(BaseSettings):
     stripe_webhook_secret: str = ""
     stripe_price_id_pro: str = ""  # Stripe Price ID for $10/mo Pro plan
 
-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+    # Read project .env first, then fall back to the user's home .env (where
+    # cross-project secrets like ELEVENLABS_API_KEY live).
+    model_config = {
+        "env_file": (".env", "/home/cs/.env"),
+        "env_file_encoding": "utf-8",
+        "extra": "ignore",
+    }
 
 
 settings = Settings()

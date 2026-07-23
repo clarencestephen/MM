@@ -1,4 +1,4 @@
-# MM — Music Maker
+# MM
 
 **AI-native Hip Hop music creation platform. 100% local. Zero API calls.**
 
@@ -49,7 +49,7 @@ pip install -r requirements.txt
 pip install -r requirements-models.txt  # optional, has graceful fallbacks
 
 # Start Postgres + Redis yourself, then:
-python scripts/create_tables.py
+python scripts/migrate.py
 uvicorn backend.main:app --reload
 ```
 

@@ -55,3 +55,9 @@ alembic/versions/*.py
 
 # Logs
 *.log
+
+# Local dev artifacts + model caches — never commit
+.next/
+checkpoints/
+storage/
+mm_dev.db

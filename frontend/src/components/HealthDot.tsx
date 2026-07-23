@@ -28,14 +28,14 @@ export default function HealthDot() {
   }, []);
 
   const dotColor: Record<Status, string> = {
-    loading: "bg-[#3A3632]",
+    loading: "bg-[#4A3F60]",
     healthy: "bg-emerald-600",
-    error: "bg-[#FF2D2D]",
+    error: "bg-[#FF3388]",
   };
 
   return (
     <div className="flex items-center gap-1.5">
-      <span className="text-[9px] font-medium text-[#231F1C]">
+      <span className="text-[9px] font-medium text-[#2D2640]">
         {status === "healthy" ? "local" : status === "error" ? "offline" : "..."}
       </span>
       <span className="relative flex h-1.5 w-1.5">

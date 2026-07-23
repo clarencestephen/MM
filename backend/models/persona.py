@@ -12,6 +12,10 @@ class Persona(Base, TimestampMixin):
     voice_sample_path = Column(String, nullable=True)
     embedding_path = Column(String, nullable=True)
     style_mode = Column(String, nullable=True, default="rap")  # rap, melodic, rnb
+    # Provenance — which engine owns this persona's voice
+    # "xtts" (default — uses voice_sample_path) or "elevenlabs" (uses elevenlabs_voice_id)
+    voice_engine = Column(String, nullable=True, default="xtts")
+    elevenlabs_voice_id = Column(String, nullable=True)
     user_id = Column(String, ForeignKey("users.id"), nullable=False)
 
     user = relationship("User", back_populates="personas")

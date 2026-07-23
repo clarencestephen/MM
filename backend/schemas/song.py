@@ -20,6 +20,9 @@ class SongUpdate(BaseModel):
     mood: str | None = None
     bpm: int | None = None
     key: str | None = None
+    status: str | None = None
+    mix_path: str | None = None
+    vocal_path: str | None = None
 
 
 class SongResponse(BaseModel):

@@ -2,7 +2,7 @@
 
 
 def test_create_song(client, sample_project):
-    resp = client.post("/api/songs/", json={
+    resp = client.post("/api/songs", json={
         "title": "Fire Track",
         "lyrics": "[Verse]\nBars on bars\n\n[Hook]\nCatchy hook",
         "genre": "hip_hop",
@@ -18,7 +18,7 @@ def test_create_song(client, sample_project):
 
 
 def test_create_song_defaults(client, sample_project):
-    resp = client.post("/api/songs/", json={
+    resp = client.post("/api/songs", json={
         "project_id": sample_project["id"],
     })
     assert resp.status_code == 200

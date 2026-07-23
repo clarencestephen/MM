@@ -13,7 +13,7 @@ def test_export_wav(mock_export, client, sample_song, db_session):
     song.mix_path = "/tmp/fake_mix.wav"
     db_session.commit()
 
-    resp = client.post("/api/export/", json={
+    resp = client.post("/api/export", json={
         "song_id": sample_song["id"],
         "format": "wav",
     })
@@ -33,7 +33,7 @@ def test_export_mp3(mock_export, client, sample_song, db_session):
     song.mix_path = "/tmp/fake_mix.wav"
     db_session.commit()
 
-    resp = client.post("/api/export/", json={
+    resp = client.post("/api/export", json={
         "song_id": sample_song["id"],
         "format": "mp3",
     })
@@ -43,7 +43,7 @@ def test_export_mp3(mock_export, client, sample_song, db_session):
 
 def test_export_no_mix(client, sample_song):
     """Export without a mix → 400."""
-    resp = client.post("/api/export/", json={
+    resp = client.post("/api/export", json={
         "song_id": sample_song["id"],
         "format": "wav",
     })
@@ -51,7 +51,7 @@ def test_export_no_mix(client, sample_song):
 
 
 def test_export_song_not_found(client):
-    resp = client.post("/api/export/", json={
+    resp = client.post("/api/export", json={
         "song_id": "nonexistent",
         "format": "wav",
     })

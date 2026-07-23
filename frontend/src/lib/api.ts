@@ -100,11 +100,11 @@ async function upload<T>(path: string, formData: FormData): Promise<T> {
 // ─── Projects ────────────────────────────────────────────────────────────────
 
 export async function createProject(data: CreateProjectRequest): Promise<Project> {
-  return post<Project>("/api/projects/", data);
+  return post<Project>("/api/projects", data);
 }
 
 export async function listProjects(): Promise<Project[]> {
-  return get<Project[]>("/api/projects/");
+  return get<Project[]>("/api/projects");
 }
 
 export async function getProject(id: string): Promise<Project> {
@@ -114,7 +114,7 @@ export async function getProject(id: string): Promise<Project> {
 // ─── Songs ───────────────────────────────────────────────────────────────────
 
 export async function createSong(data: CreateSongRequest): Promise<Song> {
-  return post<Song>("/api/songs/", data);
+  return post<Song>("/api/songs", data);
 }
 
 export async function getSong(id: string): Promise<Song> {
@@ -164,7 +164,7 @@ export async function uploadVocal(songId: string, file: File): Promise<UploadRes
 // ─── Generation ──────────────────────────────────────────────────────────────
 
 export async function generateSong(data: GenerateSongRequest): Promise<GenerateSongResponse> {
-  return post<GenerateSongResponse>("/api/generate/", data);
+  return post<GenerateSongResponse>("/api/generate", data);
 }
 
 export async function generateLyrics(data: GenerateLyricsRequest): Promise<GenerateLyricsResponse> {
@@ -192,11 +192,11 @@ export async function alignLyrics(data: AlignLyricsRequest): Promise<AlignLyrics
 // ─── Personas ────────────────────────────────────────────────────────────────
 
 export async function createPersona(data: CreatePersonaRequest): Promise<Persona> {
-  return post<Persona>("/api/personas/", data);
+  return post<Persona>("/api/personas", data);
 }
 
 export async function listPersonas(): Promise<Persona[]> {
-  return get<Persona[]>("/api/personas/");
+  return get<Persona[]>("/api/personas");
 }
 
 export async function getPersona(id: string): Promise<Persona> {
@@ -212,7 +212,7 @@ export async function uploadVoiceSample(personaId: string, file: File): Promise<
 // ─── Export ──────────────────────────────────────────────────────────────────
 
 export async function exportSong(data: ExportRequest): Promise<ExportResponse> {
-  return post<ExportResponse>("/api/export/", data);
+  return post<ExportResponse>("/api/export", data);
 }
 
 export function getExportDownloadUrl(jobId: string): string {
@@ -250,12 +250,12 @@ import type {
 } from "./types";
 
 export async function createStudioSession(data: CreateStudioSessionRequest): Promise<StudioSession> {
-  return post<StudioSession>("/api/studio/sessions/", data);
+  return post<StudioSession>("/api/studio/sessions", data);
 }
 
 export async function listStudioSessions(projectId?: string): Promise<StudioSessionListItem[]> {
   const q = projectId ? `?project_id=${projectId}` : "";
-  return get<StudioSessionListItem[]>(`/api/studio/sessions/${q}`);
+  return get<StudioSessionListItem[]>(`/api/studio/sessions${q}`);
 }
 
 export async function getStudioSession(id: string): Promise<StudioSession> {

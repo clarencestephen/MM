@@ -14,19 +14,19 @@ export default function UpgradePrompt({ feature, message, onDismiss }: UpgradePr
   if (dismissed) return null;
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-[#FF6B35]/20 bg-gradient-to-r from-[#FF6B35]/[0.06] to-[#FF6B35]/[0.02] px-5 py-4">
+    <div className="relative overflow-hidden rounded-xl border border-[#B432FF]/20 bg-gradient-to-r from-[#B432FF]/[0.06] to-[#B432FF]/[0.02] px-5 py-4">
       <div className="flex items-start gap-3">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#FF6B35]/10">
-          <Sparkles className="h-4 w-4 text-[#FF6B35]" />
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#B432FF]/10">
+          <Sparkles className="h-4 w-4 text-[#B432FF]" />
         </div>
         <div className="flex-1">
-          <p className="text-[13px] font-semibold text-[#F0EDE8]">
+          <p className="text-[13px] font-semibold text-[#E0D0F0]">
             Unlock {feature}
           </p>
-          <p className="mt-0.5 text-[12px] text-[#6B6560]">{message}</p>
+          <p className="mt-0.5 text-[12px] text-[#8A7FA8]">{message}</p>
           <button
             type="button"
-            className="mt-3 rounded-lg bg-[#FF6B35] px-4 py-2 text-[12px] font-bold text-black transition hover:bg-[#FF8555]"
+            className="mt-3 rounded-lg bg-[#B432FF] px-4 py-2 text-[12px] font-bold text-white transition hover:bg-[#C758FF]"
           >
             Upgrade to Pro — $10/mo
           </button>
@@ -35,7 +35,7 @@ export default function UpgradePrompt({ feature, message, onDismiss }: UpgradePr
           <button
             type="button"
             onClick={() => { setDismissed(true); onDismiss?.(); }}
-            className="text-[#3A3632] hover:text-[#6B6560] transition"
+            className="text-[#4A3F60] hover:text-[#8A7FA8] transition"
           >
             <X className="h-4 w-4" />
           </button>

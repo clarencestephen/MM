@@ -89,10 +89,12 @@ def _seed_vc_convert(
         output_name = f"vc_{uuid.uuid4().hex[:12]}.wav"
         output_path = str(settings.vocals_dir / output_name)
 
-        # seed-vc exposes inference via command line / module
-        # Use subprocess for clean isolation (avoids VRAM leaks)
+        # seed-vc exposes inference via `python -m seed_vc.inference`
+        # (the package has no `__main__`, so the bare `-m seed_vc` form fails).
+        # Use subprocess for clean isolation (avoids VRAM leaks).
+        import sys
         cmd = [
-            "python", "-m", "seed_vc",
+            sys.executable, "-m", "seed_vc.inference",
             "--source", source_path,
             "--target", reference_path,
             "--output", str(settings.vocals_dir),

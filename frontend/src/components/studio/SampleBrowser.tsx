@@ -84,35 +84,35 @@ export default function SampleBrowser({ onAddSample, tier }: SampleBrowserProps)
   }, [playing, audioRef]);
 
   return (
-    <div className="rounded-2xl border border-[#1c1b18] bg-[#0a0a09] overflow-hidden">
+    <div className="rounded-2xl border border-[#2A1A4A] bg-[#0D0A14] overflow-hidden">
       {/* Header */}
-      <div className="border-b border-[#1c1b18] px-4 py-3">
-        <h3 className="text-[14px] font-bold text-[#F0EDE8] flex items-center gap-2">
+      <div className="border-b border-[#2A1A4A] px-4 py-3">
+        <h3 className="text-[14px] font-bold text-[#E0D0F0] flex items-center gap-2">
           <span className="text-lg">🎶</span> Sound Library
         </h3>
 
         {/* Search */}
         <div className="mt-2 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#3A3632]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#4A3F60]" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search sounds..."
-            className="w-full rounded-lg border border-[#1c1b18] bg-[#111110] pl-9 pr-3 py-2 text-[12px] text-[#F0EDE8] placeholder-[#3A3632] outline-none focus:border-[#FF6B35]/30"
+            className="w-full rounded-lg border border-[#2A1A4A] bg-[#1A0A2E] pl-9 pr-3 py-2 text-[12px] text-[#E0D0F0] placeholder-[#4A3F60] outline-none focus:border-[#B432FF]/30"
           />
         </div>
       </div>
 
       {/* Category pills */}
-      <div className="flex gap-1.5 overflow-x-auto px-4 py-3 border-b border-[#1c1b18]">
+      <div className="flex gap-1.5 overflow-x-auto px-4 py-3 border-b border-[#2A1A4A]">
         <button
           type="button"
           onClick={() => setSelectedCategory(null)}
           className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition ${
             !selectedCategory
-              ? "bg-[#FF6B35] text-black"
-              : "bg-[#111110] text-[#6B6560] hover:text-[#F0EDE8]"
+              ? "bg-[#B432FF] text-white"
+              : "bg-[#1A0A2E] text-[#8A7FA8] hover:text-[#E0D0F0]"
           }`}
         >
           All
@@ -124,8 +124,8 @@ export default function SampleBrowser({ onAddSample, tier }: SampleBrowserProps)
             onClick={() => setSelectedCategory(cat.id)}
             className={`shrink-0 flex items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-semibold transition ${
               selectedCategory === cat.id
-                ? "text-black"
-                : "bg-[#111110] text-[#6B6560] hover:text-[#F0EDE8]"
+                ? "text-white"
+                : "bg-[#1A0A2E] text-[#8A7FA8] hover:text-[#E0D0F0]"
             }`}
             style={selectedCategory === cat.id ? { backgroundColor: cat.color } : {}}
           >
@@ -140,14 +140,14 @@ export default function SampleBrowser({ onAddSample, tier }: SampleBrowserProps)
         {samples.length === 0 ? (
           <div className="flex flex-col items-center py-8">
             <span className="text-2xl mb-2">🔍</span>
-            <p className="text-[12px] text-[#3A3632]">No sounds found</p>
+            <p className="text-[12px] text-[#4A3F60]">No sounds found</p>
           </div>
         ) : (
-          <div className="divide-y divide-[#0f0e0c]">
+          <div className="divide-y divide-[#1A0A2E]">
             {samples.map((sample) => (
               <div
                 key={sample.id}
-                className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#111110] transition group"
+                className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#1A0A2E] transition group"
               >
                 {/* Color dot + emoji */}
                 <div
@@ -159,13 +159,13 @@ export default function SampleBrowser({ onAddSample, tier }: SampleBrowserProps)
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <p className="truncate text-[12px] font-semibold text-[#F0EDE8]">
+                  <p className="truncate text-[12px] font-semibold text-[#E0D0F0]">
                     {sample.name}
                     {!sample.is_free && tier === "free" && (
-                      <Lock className="inline ml-1 h-3 w-3 text-[#FF6B35]" />
+                      <Lock className="inline ml-1 h-3 w-3 text-[#B432FF]" />
                     )}
                   </p>
-                  <div className="flex items-center gap-1.5 text-[10px] text-[#3A3632]">
+                  <div className="flex items-center gap-1.5 text-[10px] text-[#4A3F60]">
                     {sample.bpm && <span>{sample.bpm} BPM</span>}
                     {sample.key && <><span>·</span><span>{sample.key}</span></>}
                   </div>
@@ -178,8 +178,8 @@ export default function SampleBrowser({ onAddSample, tier }: SampleBrowserProps)
                     onClick={() => handlePreview(sample.id)}
                     className={`flex h-7 w-7 items-center justify-center rounded-full transition ${
                       playing === sample.id
-                        ? "bg-[#FF6B35] text-black scale-110"
-                        : "bg-[#111110] text-[#6B6560] hover:text-[#F0EDE8] opacity-0 group-hover:opacity-100"
+                        ? "bg-[#B432FF] text-white scale-110"
+                        : "bg-[#1A0A2E] text-[#8A7FA8] hover:text-[#E0D0F0] opacity-0 group-hover:opacity-100"
                     }`}
                   >
                     <Play className="h-3 w-3 ml-0.5" />
@@ -188,7 +188,7 @@ export default function SampleBrowser({ onAddSample, tier }: SampleBrowserProps)
                   <button
                     type="button"
                     onClick={() => onAddSample(sample.id)}
-                    className="flex h-7 w-7 items-center justify-center rounded-full bg-[#FF6B35]/10 text-[#FF6B35] transition hover:bg-[#FF6B35]/20 opacity-0 group-hover:opacity-100"
+                    className="flex h-7 w-7 items-center justify-center rounded-full bg-[#B432FF]/10 text-[#B432FF] transition hover:bg-[#B432FF]/20 opacity-0 group-hover:opacity-100"
                     title="Add to session"
                   >
                     <Plus className="h-3.5 w-3.5" />
@@ -202,14 +202,14 @@ export default function SampleBrowser({ onAddSample, tier }: SampleBrowserProps)
 
       {/* Pro upsell */}
       {tier === "free" && (
-        <div className="border-t border-[#1c1b18] px-4 py-2.5 flex items-center gap-2">
-          <Sparkles className="h-3.5 w-3.5 text-[#FF6B35]" />
-          <span className="text-[10px] text-[#6B6560]">
+        <div className="border-t border-[#2A1A4A] px-4 py-2.5 flex items-center gap-2">
+          <Sparkles className="h-3.5 w-3.5 text-[#B432FF]" />
+          <span className="text-[10px] text-[#8A7FA8]">
             Upgrade to Pro for {samples.length > 0 ? "all" : "more"} sounds
           </span>
           <button
             type="button"
-            className="ml-auto rounded-md bg-[#FF6B35] px-2.5 py-1 text-[10px] font-bold text-black hover:bg-[#FF8555] transition"
+            className="ml-auto rounded-md bg-[#B432FF] px-2.5 py-1 text-[10px] font-bold text-white hover:bg-[#C758FF] transition"
           >
             $10/mo
           </button>

@@ -7,7 +7,7 @@ def test_render_job_status(mock_vocal, client, sample_song):
     """Generate a song, then check the render job status."""
     mock_vocal.return_value = "/tmp/test_vocal.wav"
 
-    gen_resp = client.post("/api/generate/", json={
+    gen_resp = client.post("/api/generate", json={
         "song_id": sample_song["id"],
         "quality": "draft",
     })

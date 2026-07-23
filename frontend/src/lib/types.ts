@@ -1,7 +1,7 @@
 // ─── Enums & Literals ────────────────────────────────────────────────────────
 
 export type Quality = "draft" | "render";
-export type Genre = "hip_hop" | "melodic_rap" | "rnb" | "lofi";
+export type Genre = "hip_hop" | "melodic_rap" | "rnb" | "lofi" | "gospel_funk" | "metal";
 export type Mood = string;
 export type MusicalKey = string;
 export type ExportFormat = "wav" | "mp3";
@@ -105,11 +105,15 @@ export interface CreateSongRequest {
 
 export interface UpdateSongRequest {
   title?: string;
+  prompt?: string;
   lyrics?: string;
   genre?: Genre;
   mood?: Mood;
   bpm?: number;
   key?: MusicalKey;
+  status?: string;
+  mix_path?: string;
+  vocal_path?: string;
 }
 
 export interface CreatePersonaRequest {
@@ -128,7 +132,10 @@ export interface GenerateSongRequest {
   section?: string;
   voice_engine?: string;
   azure_voice?: string;
+  elevenlabs_voice_id?: string;
   voice_clip_path?: string;
+  voice_description?: string;
+  style_tags?: string[];
 }
 
 export interface GenerateLyricsRequest {
@@ -136,6 +143,7 @@ export interface GenerateLyricsRequest {
   genre?: Genre;
   mood?: Mood;
   quality?: Quality;
+  style_tags?: string[];
 }
 
 export interface RewriteLyricsRequest {

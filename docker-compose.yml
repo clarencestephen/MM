@@ -1,117 +1,101 @@
-version: "3.9"
+# NOTE: This compose runs API + frontend + redis only. It uses:
+#   - host Postgres (or sqlite via .env) — host port 5432
+#   - host Ollama (GPU-loaded)         — host port 11434
+# Workers live under the "workers" profile (CPU-only here; for real GPU runs,
+# launch them on the host instead).
 
 services:
-  db:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: mm
-      POSTGRES_PASSWORD: mm_dev_password
-      POSTGRES_DB: mm_dev
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
-
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_models:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
 
   api:
     build: .
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql://mm:mm_dev_password@db:5432/mm_dev
+      # sqlite stays inside the container at /app/mm_dev.db (mounted via ./)
+      DATABASE_URL: sqlite:////app/mm_dev.db
       REDIS_URL: redis://redis:6379/0
-      OLLAMA_URL: http://ollama:11434
+      OLLAMA_URL: http://host.docker.internal:11434
       STORAGE_PATH: /app/storage
       DEBUG: "true"
+      CORS_ORIGINS: http://localhost:3000,http://localhost:3030,http://localhost:8000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./storage:/app/storage
       - ./backend:/app/backend
+      - ./scripts:/app/scripts
+      - ./mm_dev.db:/app/mm_dev.db
     depends_on:
-      - db
       - redis
-      - ollama
     command: >
-      bash -c "python scripts/create_tables.py &&
+      bash -c "python scripts/migrate.py &&
                uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload"
 
-  # Voice / Persona worker — runs on GPU 0
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    ports:
+      - "3030:3000"
+    environment:
+      # Server-side rewrite target only — browsers use relative /api paths.
+      # We run uvicorn on the host (so it can use the GPU); the container
+      # reaches the host via host.docker.internal.
+      INTERNAL_API_URL: http://host.docker.internal:8000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm run dev -- --hostname 0.0.0.0 --port 3000"
+
+  # ── Workers (opt-in: docker-compose --profile workers up) ─────────────────
+  # Without nvidia-container-toolkit, these run CPU-only. For real GPU runs
+  # use the host instead: celery -A workers.celery_app worker -Q ...
+
   worker-voice:
+    profiles: ["workers"]
     build: .
     environment:
-      DATABASE_URL: postgresql://mm:mm_dev_password@db:5432/mm_dev
+      DATABASE_URL: sqlite:////app/mm_dev.db
       REDIS_URL: redis://redis:6379/0
-      OLLAMA_URL: http://ollama:11434
+      OLLAMA_URL: http://host.docker.internal:11434
       STORAGE_PATH: /app/storage
-      CUDA_VISIBLE_DEVICES: "0"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./storage:/app/storage
+      - ./mm_dev.db:/app/mm_dev.db
     depends_on:
-      - db
       - redis
-      - ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              device_ids: ["0"]
-              capabilities: [gpu]
     command: celery -A workers.celery_app worker --loglevel=info -Q voice,generation,llm -n voice@%h
 
-  # Audio / Separation worker — runs on GPU 1
   worker-audio:
+    profiles: ["workers"]
     build: .
     environment:
-      DATABASE_URL: postgresql://mm:mm_dev_password@db:5432/mm_dev
+      DATABASE_URL: sqlite:////app/mm_dev.db
       REDIS_URL: redis://redis:6379/0
       STORAGE_PATH: /app/storage
-      CUDA_VISIBLE_DEVICES: "1"
     volumes:
       - ./storage:/app/storage
+      - ./mm_dev.db:/app/mm_dev.db
     depends_on:
-      - db
       - redis
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              device_ids: ["1"]
-              capabilities: [gpu]
     command: celery -A workers.celery_app worker --loglevel=info -Q audio,separation,alignment -n audio@%h
 
-  # CPU worker — export, mixing, lightweight tasks
   worker-cpu:
+    profiles: ["workers"]
     build: .
     environment:
-      DATABASE_URL: postgresql://mm:mm_dev_password@db:5432/mm_dev
+      DATABASE_URL: sqlite:////app/mm_dev.db
       REDIS_URL: redis://redis:6379/0
       STORAGE_PATH: /app/storage
     volumes:
       - ./storage:/app/storage
+      - ./mm_dev.db:/app/mm_dev.db
     depends_on:
-      - db
       - redis
     command: celery -A workers.celery_app worker --loglevel=info -Q export,mixing,default -n cpu@%h
-
-volumes:
-  pgdata:
-  ollama_models:

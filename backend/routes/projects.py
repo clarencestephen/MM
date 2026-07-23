@@ -9,7 +9,7 @@ from backend.schemas.project import ProjectCreate, ProjectResponse
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 
-@router.post("/", response_model=ProjectResponse)
+@router.post("", response_model=ProjectResponse)
 def create_project(data: ProjectCreate, db: Session = Depends(get_db)):
     # Auto-create user if not exists (MVP convenience)
     user = db.query(User).filter(User.id == data.user_id).first()
@@ -25,7 +25,7 @@ def create_project(data: ProjectCreate, db: Session = Depends(get_db)):
     return project
 
 
-@router.get("/", response_model=list[ProjectResponse])
+@router.get("", response_model=list[ProjectResponse])
 def list_projects(user_id: str | None = None, db: Session = Depends(get_db)):
     q = db.query(Project)
     if user_id:

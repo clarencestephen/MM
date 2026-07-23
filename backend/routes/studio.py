@@ -27,7 +27,7 @@ ALLOWED_AUDIO = {".wav", ".mp3", ".flac", ".ogg", ".m4a", ".webm"}
 
 # ---------- Sessions ----------
 
-@router.post("/sessions/", response_model=StudioSessionResponse)
+@router.post("/sessions", response_model=StudioSessionResponse)
 def create_session(data: StudioSessionCreate, db: Session = Depends(get_db)):
     session = StudioSession(
         title=data.title,
@@ -46,7 +46,7 @@ def create_session(data: StudioSessionCreate, db: Session = Depends(get_db)):
     return session
 
 
-@router.get("/sessions/", response_model=list[StudioSessionListResponse])
+@router.get("/sessions", response_model=list[StudioSessionListResponse])
 def list_sessions(project_id: str | None = None, db: Session = Depends(get_db)):
     q = db.query(StudioSession)
     if project_id:
@@ -646,7 +646,7 @@ def get_sample_categories():
     return get_categories()
 
 
-@router.get("/samples/")
+@router.get("/samples")
 def list_samples(
     category: str | None = None,
     search: str | None = None,

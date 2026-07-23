@@ -13,7 +13,7 @@ from backend.services.lyrics_service import parse_lyrics_into_sections
 router = APIRouter(prefix="/songs", tags=["songs"])
 
 
-@router.post("/", response_model=SongResponse)
+@router.post("", response_model=SongResponse)
 def create_song(data: SongCreate, db: Session = Depends(get_db)):
     song = Song(
         title=data.title,

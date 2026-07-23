@@ -1,9 +1,11 @@
 import logging
 import threading
+from urllib.parse import urlsplit
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from backend.config import settings
 from backend.routes import projects, songs, upload, generate, transform, persona, export, jobs, studio, auth, analytics
@@ -37,7 +39,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="MM — Music Maker",
+    title="MM",
     description=(
         "AI-native Hip Hop music creation platform. "
         "100% local inference — zero API calls. "
@@ -45,7 +47,40 @@ app = FastAPI(
     ),
     version="0.4.0",
     lifespan=lifespan,
+    # Next.js's rewrite normalises trailing slashes, so FastAPI's default
+    # 307-add-slash creates an infinite redirect loop behind the proxy.
+    # Routes are registered without trailing slashes; the client hits them
+    # directly.
+    redirect_slashes=False,
 )
+
+
+class RelativeRedirectMiddleware(BaseHTTPMiddleware):
+    """Strip scheme+host from Location headers on 3xx responses.
+
+    Without this, FastAPI's trailing-slash redirects emit absolute URLs based
+    on the request Host header. When the API runs behind a Next.js rewrite,
+    that header is the internal docker hostname (`api:8000`), which the
+    browser cannot resolve. Forcing relative paths makes redirects safe under
+    any proxy.
+    """
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        if 300 <= response.status_code < 400:
+            location = response.headers.get("location")
+            if location:
+                parts = urlsplit(location)
+                if parts.scheme or parts.netloc:
+                    relative = parts.path
+                    if parts.query:
+                        relative += f"?{parts.query}"
+                    if parts.fragment:
+                        relative += f"#{parts.fragment}"
+                    response.headers["location"] = relative or "/"
+        return response
+
+
+app.add_middleware(RelativeRedirectMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
@@ -71,7 +106,7 @@ app.include_router(analytics.router, prefix="/api")
 @app.get("/")
 def root():
     return {
-        "name": "MM — Music Maker",
+        "name": "MM",
         "version": "0.3.0",
         "status": "running",
         "mode": "local-first, GPU-resident",
@@ -86,21 +121,24 @@ def health():
     from backend.services.model_manager import models
 
     import shutil
-    import torch
 
-    gpu_info = []
-    if torch.cuda.is_available():
-        for i in range(torch.cuda.device_count()):
-            props = torch.cuda.get_device_properties(i)
-            mem_used = torch.cuda.memory_allocated(i) / (1024**3)
-            mem_total = props.total_memory / (1024**3)
-            gpu_info.append({
-                "gpu": i,
-                "name": props.name,
-                "vram_used_gb": round(mem_used, 2),
-                "vram_total_gb": round(mem_total, 2),
-                "utilization_pct": round(mem_used / mem_total * 100, 1),
-            })
+    gpu_info: list[dict] = []
+    try:
+        import torch
+        if torch.cuda.is_available():
+            for i in range(torch.cuda.device_count()):
+                props = torch.cuda.get_device_properties(i)
+                mem_used = torch.cuda.memory_allocated(i) / (1024**3)
+                mem_total = props.total_memory / (1024**3)
+                gpu_info.append({
+                    "gpu": i,
+                    "name": props.name,
+                    "vram_used_gb": round(mem_used, 2),
+                    "vram_total_gb": round(mem_total, 2),
+                    "utilization_pct": round(mem_used / mem_total * 100, 1),
+                })
+    except ImportError:
+        pass  # torch optional — base image runs without ML deps
 
     return {
         "status": "ok",

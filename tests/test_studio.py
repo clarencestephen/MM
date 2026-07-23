@@ -5,7 +5,7 @@ import pytest
 
 @pytest.fixture()
 def studio_session(client, sample_project):
-    resp = client.post("/api/studio/sessions/", json={
+    resp = client.post("/api/studio/sessions", json={
         "title": "Test Studio Session",
         "bpm": 90,
         "key": "G",
@@ -20,7 +20,7 @@ def studio_session(client, sample_project):
 # ---------- Session CRUD ----------
 
 def test_create_session(client, sample_project):
-    resp = client.post("/api/studio/sessions/", json={
+    resp = client.post("/api/studio/sessions", json={
         "title": "Beat Lab",
         "bpm": 140,
         "key": "D",
@@ -36,7 +36,7 @@ def test_create_session(client, sample_project):
 
 
 def test_list_sessions(client, studio_session, sample_project):
-    resp = client.get(f"/api/studio/sessions/?project_id={sample_project['id']}")
+    resp = client.get(f"/api/studio/sessions?project_id={sample_project['id']}")
     assert resp.status_code == 200
     sessions = resp.json()
     assert len(sessions) >= 1

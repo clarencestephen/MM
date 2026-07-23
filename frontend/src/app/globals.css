@@ -1,37 +1,44 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   MM — "The Booth" Design System
-   Aesthetic: Pitch-black studio at 2am. One warm spotlight. Red recording light.
+   MM — Darth Bankai Design System
+   Aesthetic: Cosmic void, Sith neon, geometric. The dark side of music.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme inline {
-  /* True black foundation */
-  --color-background: #000000;
-  --color-foreground: #F0EDE8;
+  /* Void foundation */
+  --color-background: #07060B;          /* Void Black */
+  --color-foreground: #E0D0F0;          /* Star Light */
 
-  /* Warm surfaces — even the darks have warmth */
-  --color-surface: #0a0a09;
-  --color-surface-raised: #111110;
-  --color-surface-hover: #191816;
+  /* Cosmic surfaces */
+  --color-surface: #0D0A14;             /* Deep Space — card / panel */
+  --color-surface-raised: #1A0A2E;      /* Nebula Core — raised */
+  --color-surface-hover: #241344;       /* Nebula hover */
 
-  /* Warm borders */
-  --color-border: #1c1b18;
-  --color-border-hover: #2a2923;
+  /* Sith borders */
+  --color-border: #2A1A4A;
+  --color-border-hover: #3D2466;
 
-  /* Electric orange — like a VU meter in the red */
-  --color-accent: #FF6B35;
-  --color-accent-hover: #FF8555;
-  --color-accent-muted: #FF6B3512;
-  --color-accent-glow: #FF6B3520;
+  /* Sith Purple — primary accent */
+  --color-accent: #B432FF;
+  --color-accent-hover: #C758FF;
+  --color-accent-muted: #B432FF12;
+  --color-accent-glow: #B432FF20;
 
-  /* Recording red */
-  --color-recording: #FF2D2D;
+  /* Neon Saber — secondary accent / recording / hot CTA */
+  --color-recording: #FF3388;
+  --color-saber: #FF3388;
 
-  /* Warm text scale */
-  --color-text-secondary: #6B6560;
-  --color-text-dim: #3A3632;
-  --color-text-ghost: #231F1C;
+  /* Holo Blue — AI/ML / tech accent */
+  --color-holo: #2244CC;
+
+  /* Dark Sith — gradient endpoints, deep shadow */
+  --color-sith-dark: #4411AA;
+
+  /* Star Light text scale */
+  --color-text-secondary: #8A7FA8;
+  --color-text-dim: #4A3F60;
+  --color-text-ghost: #2D2640;
 }
 
 /* ─── Base ──────────────────────────────────────────────────────────────── */
@@ -41,20 +48,46 @@ html {
 }
 
 body {
-  background: #000;
+  background: #07060B;
   color: var(--color-foreground);
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-body), "Kosugi Maru", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ─── Display Font ──────────────────────────────────────────────────────── */
+/* ─── Display Font (Orbitron — headlines, brand) ────────────────────────── */
 
 .font-display {
-  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+  font-family: var(--font-display), "Orbitron", "Inter", sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-/* ─── Film Grain ────────────────────────────────────────────────────────── */
+/* ─── Tech Font (Rajdhani — labels, stats, UI chrome) ───────────────────── */
+
+.font-tech {
+  font-family: var(--font-tech), "Rajdhani", "Inter", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ─── Cosmic Background — radial nebula behind everything ───────────────── */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, #1A0A2E 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 100%, #4411AA22 0%, transparent 70%),
+    #07060B;
+}
+
+/* ─── Cosmic Texture — subtle triangle pattern overlay ──────────────────── */
 
 body::after {
   content: "";
@@ -62,7 +95,7 @@ body::after {
   inset: 0;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.018;
+  opacity: 0.025;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 256px 256px;
@@ -72,14 +105,14 @@ body::after {
 
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #1c1b18; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: #2a2923; }
-* { scrollbar-width: thin; scrollbar-color: #1c1b18 transparent; }
+::-webkit-scrollbar-thumb { background: #2A1A4A; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #3D2466; }
+* { scrollbar-width: thin; scrollbar-color: #2A1A4A transparent; }
 
 /* ─── Selection ─────────────────────────────────────────────────────────── */
 
 ::selection {
-  background-color: #FF6B3530;
+  background-color: #B432FF40;
   color: #fff;
 }
 
@@ -88,6 +121,30 @@ body::after {
 :focus-visible {
   outline: 1.5px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ACCENT GRADIENT — the brand signature
+   Sith Purple → Neon Saber → Dark Sith
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.bg-bankai-gradient {
+  background: linear-gradient(135deg, #B432FF 0%, #FF3388 50%, #4411AA 100%);
+}
+
+.text-bankai-gradient {
+  background: linear-gradient(135deg, #B432FF 0%, #FF3388 50%, #C758FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.border-bankai-gradient {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#0D0A14, #0D0A14) padding-box,
+    linear-gradient(135deg, #B432FF, #FF3388, #4411AA) border-box;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -130,8 +187,13 @@ body::after {
 }
 
 @keyframes ambient-drift {
-  0%, 100% { opacity: 0.03; transform: scale(1); }
-  50% { opacity: 0.06; transform: scale(1.05); }
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+@keyframes nebula-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
 /* Utility classes */
@@ -145,7 +207,6 @@ body::after {
   animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Stagger cascade — each subsequent element waits a beat */
 .stagger-1 { animation-delay: 50ms; }
 .stagger-2 { animation-delay: 150ms; }
 .stagger-3 { animation-delay: 250ms; }
@@ -154,7 +215,7 @@ body::after {
 .stagger-6 { animation-delay: 550ms; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   THE SPOTLIGHT — warm overhead glow on the hero section
+   THE HERO — nebula glow behind the prompt
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .hero-spotlight {
@@ -167,19 +228,23 @@ body::after {
   top: -80px;
   left: 50%;
   transform: translateX(-50%);
-  width: 700px;
-  height: 500px;
-  background: radial-gradient(
-    ellipse 50% 40% at 50% 0%,
-    #FF6B3505 0%,
-    transparent 100%
-  );
+  width: 800px;
+  height: 600px;
+  background:
+    radial-gradient(ellipse 45% 35% at 50% 10%, #B432FF20 0%, transparent 70%),
+    radial-gradient(ellipse 30% 25% at 50% 5%, #FF338815 0%, transparent 70%);
   pointer-events: none;
   animation: ambient-drift 8s ease-in-out infinite;
+  z-index: 0;
+}
+
+.hero-spotlight > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   THE PROMPT — mic in the booth
+   THE PROMPT — saber glow on the input
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .prompt-console {
@@ -187,18 +252,16 @@ body::after {
   border-radius: 20px;
 }
 
-/* Warm border glow — on standby it barely breathes */
 .prompt-console::before {
   content: "";
   position: absolute;
   inset: -1px;
   border-radius: inherit;
   background: linear-gradient(
-    160deg,
-    #FF6B3518 0%,
-    #FF6B3506 30%,
-    transparent 60%,
-    #FF6B3510 100%
+    135deg,
+    #B432FF 0%,
+    #FF3388 50%,
+    #4411AA 100%
   );
   opacity: 0;
   transition: opacity 0.5s ease;
@@ -213,16 +276,15 @@ body::after {
   opacity: 1;
 }
 
-/* Outer glow on focus */
 .prompt-console:focus-within {
   box-shadow:
-    0 0 0 1px #FF6B3515,
-    0 4px 40px -10px #FF6B3510,
-    0 20px 80px -20px #FF6B3508;
+    0 0 0 1px #B432FF30,
+    0 4px 40px -10px #B432FF25,
+    0 20px 80px -20px #FF338815;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   TRACKLIST ROWS — vinyl sleeve energy
+   TRACKLIST ROWS
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .track-row {
@@ -232,12 +294,12 @@ body::after {
 }
 
 .track-row:hover {
-  background-color: #0a0a09;
-  border-color: #2a2923;
+  background-color: #0D0A14;
+  border-color: #3D2466;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   WAVEFORM BARS — for the player
+   WAVEFORM BARS
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .waveform-bar {
@@ -250,7 +312,7 @@ body::after {
 .waveform-bar:nth-child(5) { --bar-height: 8px; animation-delay: 0.48s; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   DIVIDER — thin warm gradient line
+   DIVIDER — Sith gradient line
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .warm-divider {
@@ -258,9 +320,16 @@ body::after {
   background: linear-gradient(
     to right,
     transparent 0%,
-    #1c1b18 20%,
-    #2a2923 50%,
-    #1c1b18 80%,
+    #2A1A4A 20%,
+    #B432FF60 50%,
+    #2A1A4A 80%,
     transparent 100%
   );
+}
+
+/* Neon Border — gradient top/bottom signature element */
+.neon-border-y {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(90deg, transparent, #B432FF, #FF3388, #B432FF, transparent) 1;
 }

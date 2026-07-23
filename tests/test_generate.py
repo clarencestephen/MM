@@ -10,7 +10,7 @@ def test_generate_song_no_lyrics(client, sample_song):
     # First clear the lyrics
     client.patch(f"/api/songs/{sample_song['id']}", json={"lyrics": ""})
 
-    resp = client.post("/api/generate/", json={
+    resp = client.post("/api/generate", json={
         "song_id": sample_song["id"],
         "quality": "draft",
     })
@@ -19,7 +19,7 @@ def test_generate_song_no_lyrics(client, sample_song):
 
 
 def test_generate_song_not_found(client):
-    resp = client.post("/api/generate/", json={
+    resp = client.post("/api/generate", json={
         "song_id": "nonexistent",
         "quality": "draft",
     })
@@ -32,7 +32,7 @@ def test_generate_song_with_lyrics(mock_mix, mock_vocal, client, sample_song):
     mock_vocal.return_value = "/tmp/test_vocal.wav"
     mock_mix.return_value = "/tmp/test_mix.wav"
 
-    resp = client.post("/api/generate/", json={
+    resp = client.post("/api/generate", json={
         "song_id": sample_song["id"],
         "lyrics": "[Verse]\nTest bars here\n\n[Hook]\nTest hook yeah",
         "quality": "draft",
@@ -50,7 +50,7 @@ def test_generate_song_no_beat(mock_vocal, client, sample_song):
     """Generate without a beat → vocal becomes the mix."""
     mock_vocal.return_value = "/tmp/test_vocal.wav"
 
-    resp = client.post("/api/generate/", json={
+    resp = client.post("/api/generate", json={
         "song_id": sample_song["id"],
         "quality": "draft",
     })
@@ -63,7 +63,7 @@ def test_generate_song_section_regen(mock_vocal, client, sample_song):
     """Regenerate only the hook section."""
     mock_vocal.return_value = "/tmp/test_vocal.wav"
 
-    resp = client.post("/api/generate/", json={
+    resp = client.post("/api/generate", json={
         "song_id": sample_song["id"],
         "section": "hook",
         "quality": "draft",
@@ -87,7 +87,7 @@ def test_generate_with_persona(mock_convert, mock_vocal, client, sample_song, sa
     persona.embedding_path = "/tmp/fake_embedding.wav"
     db_session.commit()
 
-    resp = client.post("/api/generate/", json={
+    resp = client.post("/api/generate", json={
         "song_id": sample_song["id"],
         "persona_id": sample_persona["id"],
         "quality": "draft",

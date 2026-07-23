@@ -2,7 +2,7 @@
 
 
 def test_create_project(client):
-    resp = client.post("/api/projects/", json={
+    resp = client.post("/api/projects", json={
         "title": "My Album",
         "description": "First album",
         "user_id": "user-abc",
@@ -15,7 +15,7 @@ def test_create_project(client):
 
 
 def test_create_project_auto_creates_user(client):
-    resp = client.post("/api/projects/", json={
+    resp = client.post("/api/projects", json={
         "title": "Project X",
         "user_id": "brand-new-user",
     })
@@ -24,7 +24,7 @@ def test_create_project_auto_creates_user(client):
 
 
 def test_list_projects(client, sample_project):
-    resp = client.get("/api/projects/")
+    resp = client.get("/api/projects")
     assert resp.status_code == 200
     projects = resp.json()
     assert len(projects) >= 1
@@ -32,7 +32,7 @@ def test_list_projects(client, sample_project):
 
 
 def test_list_projects_by_user(client, sample_project):
-    resp = client.get("/api/projects/", params={"user_id": "test-user-1"})
+    resp = client.get("/api/projects", params={"user_id": "test-user-1"})
     assert resp.status_code == 200
     assert all(p["user_id"] == "test-user-1" for p in resp.json())
 

@@ -43,8 +43,8 @@ createdb mm_dev
 # 5. Copy and configure env
 cp .env.example .env
 
-# 6. Create tables
-python scripts/create_tables.py
+# 6. Sync schema (creates tables, adds any missing columns — idempotent)
+python scripts/migrate.py
 
 # 7. Run model setup check
 python scripts/setup_models.py
@@ -57,6 +57,63 @@ celery -A workers.celery_app worker --loglevel=info -Q voice,generation,llm -n v
 celery -A workers.celery_app worker --loglevel=info -Q audio,separation,alignment -n audio@%h &
 celery -A workers.celery_app worker --loglevel=info -Q export,mixing,default -n cpu@%h &
 ```
+
+## Option 3: WhisperX sidecar (transcription / alignment)
+
+WhisperX pins numpy 2.x, torch 2.8, pandas 3.x — incompatible with the
+main `mm` env's coqui-TTS 0.22.0 and seed-vc. We isolate it in its own
+conda env and call it over HTTP on `:8100`.
+
+### One-time setup
+
+```bash
+# Create the isolated env
+conda create -n mm-whisper python=3.11 -y
+
+# Torch + CUDA 12.1 wheels (whisperx will upgrade to 2.8 — that's fine,
+# the env is isolated)
+/home/cs/anaconda3/envs/mm-whisper/bin/pip install \
+    torch torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# WhisperX + FastAPI
+/home/cs/anaconda3/envs/mm-whisper/bin/pip install \
+    git+https://github.com/m-bain/whisperX.git \
+    fastapi 'uvicorn[standard]' python-multipart
+```
+
+### Run the sidecar alongside the main backend
+
+```bash
+# Terminal A — main MM backend (port 8000)
+uvicorn backend.main:app --reload --port 8000
+
+# Terminal B — WhisperX microservice (port 8100)
+./scripts/run_whisper_service.sh
+
+# Verify
+curl http://localhost:8100/health
+# {"status":"ok","model_loaded":true,"model":"large-v3","device":"cuda:1",...}
+
+# Transcribe a vocal file
+curl -F "file=@storage/vocals/some_vocal.wav" http://localhost:8100/transcribe
+```
+
+### Configuration
+
+- `WHISPER_SERVICE_URL` (env, default `http://localhost:8100`) — main backend
+  reads this in `backend/services/alignment_service.py`. Override per-process
+  if you run the sidecar on a different host/port.
+- `WHISPER_MODEL` (env, default `large-v3`) — read by the sidecar at startup.
+- `WHISPER_DEVICE_INDEX` (env, default `1`) — which CUDA device; falls back to
+  `cuda:0` if `1` doesn't exist, and to CPU + int8 if no GPU.
+
+First start downloads ~3.1 GB (large-v3 weights) + ~360 MB (English
+wav2vec2 aligner) into `~/.cache/huggingface/`. Subsequent starts are ~10s.
+VRAM usage on `cuda:1`: ~3.5 GB idle, ~5 GB during transcription.
+
+If the sidecar is not running, the main backend logs a warning and falls
+back to a stub transcript — pipelines that depend on transcription will
+not crash, but they also won't produce real timing.
 
 ## Test Pipeline 1: Beat + Lyrics → Song
 

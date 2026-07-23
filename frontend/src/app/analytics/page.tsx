@@ -53,7 +53,7 @@ const KPI_CONFIG: Record<string, { label: string; icon: typeof Users; color: str
   signups: { label: "Daily Signups", icon: ArrowUpRight, color: "#10b981" },
   sessions_created: { label: "Sessions Created", icon: Music, color: "#8b5cf6" },
   tracks_recorded: { label: "Tracks Recorded", icon: Mic, color: "#ef4444" },
-  pro_subscribers: { label: "Pro Subscribers", icon: DollarSign, color: "#FF6B35" },
+  pro_subscribers: { label: "Pro Subscribers", icon: DollarSign, color: "#B432FF" },
 };
 
 function MiniChart({ data, color }: { data: { date: string; value: number }[]; color: string }) {
@@ -98,7 +98,7 @@ function SignalBadge({ signal, momentum }: { signal: string; momentum: number })
     );
   }
   return (
-    <span className="flex items-center gap-1 rounded-full bg-[#1c1b18] px-2 py-0.5 text-[10px] font-bold text-[#6B6560]">
+    <span className="flex items-center gap-1 rounded-full bg-[#2A1A4A] px-2 py-0.5 text-[10px] font-bold text-[#8A7FA8]">
       <Minus className="h-3 w-3" /> {momentum}%
     </span>
   );
@@ -127,7 +127,7 @@ export default function AnalyticsPage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-[#FF6B35]" />
+        <Loader2 className="h-6 w-6 animate-spin text-[#B432FF]" />
       </div>
     );
   }
@@ -141,17 +141,17 @@ export default function AnalyticsPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="font-display text-[32px] font-light italic text-[#F0EDE8]">
+            <h1 className="font-display text-[32px] font-light italic text-[#E0D0F0]">
               Analytics
             </h1>
-            <p className="mt-1 text-[12px] text-[#6B6560]">
+            <p className="mt-1 text-[12px] text-[#8A7FA8]">
               KPI dashboard with momentum signals — 7d vs 21d moving averages
             </p>
           </div>
           <button
             type="button"
             onClick={loadReport}
-            className="flex items-center gap-2 rounded-lg border border-[#1c1b18] bg-[#0a0a09] px-3 py-2 text-[11px] font-medium text-[#6B6560] transition hover:text-[#F0EDE8]"
+            className="flex items-center gap-2 rounded-lg border border-[#2A1A4A] bg-[#0D0A14] px-3 py-2 text-[11px] font-medium text-[#8A7FA8] transition hover:text-[#E0D0F0]"
           >
             <RefreshCw className="h-3.5 w-3.5" />
             Refresh
@@ -168,7 +168,7 @@ export default function AnalyticsPage() {
             return (
               <div
                 key={key}
-                className="rounded-xl border border-[#1c1b18] bg-[#0a0a09] p-5"
+                className="rounded-xl border border-[#2A1A4A] bg-[#0D0A14] p-5"
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -178,7 +178,7 @@ export default function AnalyticsPage() {
                     >
                       <Icon className="h-3.5 w-3.5" style={{ color: config.color }} />
                     </div>
-                    <span className="text-[11px] font-semibold text-[#6B6560]">
+                    <span className="text-[11px] font-semibold text-[#8A7FA8]">
                       {config.label}
                     </span>
                   </div>
@@ -187,10 +187,10 @@ export default function AnalyticsPage() {
 
                 <div className="flex items-end justify-between">
                   <div>
-                    <p className="text-[28px] font-bold text-[#F0EDE8] leading-none">
+                    <p className="text-[28px] font-bold text-[#E0D0F0] leading-none">
                       {kpi.current}
                     </p>
-                    <div className="mt-1 flex items-center gap-2 text-[10px] text-[#3A3632]">
+                    <div className="mt-1 flex items-center gap-2 text-[10px] text-[#4A3F60]">
                       <span>7d avg: {kpi.ma7}</span>
                       <span>·</span>
                       <span>21d avg: {kpi.ma21}</span>
@@ -210,10 +210,10 @@ export default function AnalyticsPage() {
                       <ArrowDownRight className="h-3 w-3" /> Decelerating
                     </span>
                   ) : (
-                    <span className="text-[#3A3632]">Flat</span>
+                    <span className="text-[#4A3F60]">Flat</span>
                   )}
-                  <span className="text-[#231F1C]">·</span>
-                  <span className="text-[#3A3632]">
+                  <span className="text-[#2D2640]">·</span>
+                  <span className="text-[#4A3F60]">
                     {kpi.change >= 0 ? "+" : ""}{kpi.change} vs yesterday
                   </span>
                 </div>
@@ -224,15 +224,15 @@ export default function AnalyticsPage() {
 
         {/* Actionable Items */}
         {report?.actionable_items && report.actionable_items.length > 0 && (
-          <div className="rounded-xl border border-[#1c1b18] bg-[#0a0a09] p-6">
-            <h2 className="text-[14px] font-bold text-[#F0EDE8] mb-4">
+          <div className="rounded-xl border border-[#2A1A4A] bg-[#0D0A14] p-6">
+            <h2 className="text-[14px] font-bold text-[#E0D0F0] mb-4">
               Actionable Items
             </h2>
             <div className="space-y-3">
               {report.actionable_items.map((item, i) => (
                 <div
                   key={i}
-                  className="rounded-lg border border-[#1c1b18] bg-[#111110] p-4"
+                  className="rounded-lg border border-[#2A1A4A] bg-[#1A0A2E] p-4"
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <span
@@ -241,17 +241,17 @@ export default function AnalyticsPage() {
                           ? "bg-red-500/10 text-red-400"
                           : item.priority === "medium"
                             ? "bg-amber-500/10 text-amber-500"
-                            : "bg-[#1c1b18] text-[#6B6560]"
+                            : "bg-[#2A1A4A] text-[#8A7FA8]"
                       }`}
                     >
                       {item.priority}
                     </span>
-                    <span className="text-[11px] font-semibold text-[#6B6560]">
+                    <span className="text-[11px] font-semibold text-[#8A7FA8]">
                       {item.area}
                     </span>
                   </div>
-                  <p className="text-[12px] text-[#F0EDE8] mb-1">{item.finding}</p>
-                  <p className="text-[11px] text-[#6B6560]">{item.action}</p>
+                  <p className="text-[12px] text-[#E0D0F0] mb-1">{item.finding}</p>
+                  <p className="text-[11px] text-[#8A7FA8]">{item.action}</p>
                 </div>
               ))}
             </div>
@@ -260,7 +260,7 @@ export default function AnalyticsPage() {
 
         {/* Report timestamp */}
         {report && (
-          <p className="mt-4 text-center text-[10px] text-[#231F1C]">
+          <p className="mt-4 text-center text-[10px] text-[#2D2640]">
             Generated: {new Date(report.generated_at).toLocaleString()}
           </p>
         )}

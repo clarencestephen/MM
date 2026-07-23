@@ -32,13 +32,13 @@ export default function TransportControls({
   onKeyChange,
 }: TransportControlsProps) {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-[#1c1b18] bg-[#0a0a09] px-4 py-2.5">
+    <div className="flex items-center gap-3 rounded-xl border border-[#2A1A4A] bg-[#0D0A14] px-4 py-2.5">
       {/* Transport buttons */}
       <div className="flex items-center gap-1">
         <button
           type="button"
           onClick={onRewind}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#6B6560] transition hover:text-[#F0EDE8] hover:bg-[#111110]"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#8A7FA8] transition hover:text-[#E0D0F0] hover:bg-[#1A0A2E]"
         >
           <SkipBack className="h-3.5 w-3.5" />
         </button>
@@ -48,8 +48,8 @@ export default function TransportControls({
           onClick={isPlaying ? onStop : onPlay}
           className={`flex h-8 w-8 items-center justify-center rounded-lg transition ${
             isPlaying
-              ? "bg-[#FF6B35] text-black"
-              : "text-[#6B6560] hover:text-[#F0EDE8] hover:bg-[#111110]"
+              ? "bg-[#B432FF] text-white"
+              : "text-[#8A7FA8] hover:text-[#E0D0F0] hover:bg-[#1A0A2E]"
           }`}
         >
           {isPlaying ? <Square className="h-3 w-3" /> : <Play className="h-3.5 w-3.5 ml-0.5" />}
@@ -60,19 +60,19 @@ export default function TransportControls({
           onClick={onRecord}
           className={`flex h-8 w-8 items-center justify-center rounded-lg transition ${
             isRecording
-              ? "bg-[#FF2D2D] text-white"
-              : "text-[#6B6560] hover:text-[#FF2D2D] hover:bg-[#111110]"
+              ? "bg-[#FF3388] text-white"
+              : "text-[#8A7FA8] hover:text-[#FF3388] hover:bg-[#1A0A2E]"
           }`}
         >
           <Circle className={`h-3 w-3 ${isRecording ? "fill-current" : ""}`} />
         </button>
       </div>
 
-      <span className="h-5 w-px bg-[#1c1b18]" />
+      <span className="h-5 w-px bg-[#2A1A4A]" />
 
       {/* BPM */}
       <div className="flex items-center gap-1.5">
-        <label className="text-[10px] font-bold uppercase tracking-widest text-[#3A3632]">
+        <label className="text-[10px] font-bold uppercase tracking-widest text-[#4A3F60]">
           BPM
         </label>
         <input
@@ -81,21 +81,21 @@ export default function TransportControls({
           max={300}
           value={bpm}
           onChange={(e) => onBpmChange(Number(e.target.value))}
-          className="w-14 rounded-md border border-[#1c1b18] bg-[#111110] px-2 py-1 text-center text-[13px] font-mono text-[#F0EDE8] outline-none transition focus:border-[#FF6B35]/40"
+          className="w-14 rounded-md border border-[#2A1A4A] bg-[#1A0A2E] px-2 py-1 text-center text-[13px] font-mono text-[#E0D0F0] outline-none transition focus:border-[#B432FF]/40"
         />
       </div>
 
-      <span className="h-5 w-px bg-[#1c1b18]" />
+      <span className="h-5 w-px bg-[#2A1A4A]" />
 
       {/* Key */}
       <div className="flex items-center gap-1.5">
-        <label className="text-[10px] font-bold uppercase tracking-widest text-[#3A3632]">
+        <label className="text-[10px] font-bold uppercase tracking-widest text-[#4A3F60]">
           Key
         </label>
         <select
           value={musicalKey}
           onChange={(e) => onKeyChange(e.target.value)}
-          className="rounded-md border border-[#1c1b18] bg-[#111110] px-2 py-1 text-[13px] font-mono text-[#F0EDE8] outline-none transition focus:border-[#FF6B35]/40"
+          className="rounded-md border border-[#2A1A4A] bg-[#1A0A2E] px-2 py-1 text-[13px] font-mono text-[#E0D0F0] outline-none transition focus:border-[#B432FF]/40"
         >
           {KEYS.map((k) => (
             <option key={k} value={k}>{k} {scale}</option>
@@ -106,10 +106,10 @@ export default function TransportControls({
       {/* Recording indicator */}
       {isRecording && (
         <>
-          <span className="h-5 w-px bg-[#1c1b18]" />
+          <span className="h-5 w-px bg-[#2A1A4A]" />
           <div className="flex items-center gap-1.5">
-            <div className="h-2 w-2 rounded-full bg-[#FF2D2D] animate-pulse" />
-            <span className="text-[11px] font-semibold text-[#FF2D2D]">REC</span>
+            <div className="h-2 w-2 rounded-full bg-[#FF3388] animate-pulse" />
+            <span className="text-[11px] font-semibold text-[#FF3388]">REC</span>
           </div>
         </>
       )}

@@ -109,7 +109,7 @@ export default function StudioRecorder({ onRecordingComplete, onCancel }: Studio
   };
 
   return (
-    <div className="rounded-xl border border-[#1c1b18] bg-[#0a0a09] p-5">
+    <div className="rounded-xl border border-[#2A1A4A] bg-[#0D0A14] p-5">
       {error && (
         <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-900/10 px-3 py-2 text-[12px] text-red-400">
           <AlertCircle className="h-3.5 w-3.5 shrink-0" />
@@ -122,7 +122,7 @@ export default function StudioRecorder({ onRecordingComplete, onCancel }: Studio
         ref={canvasRef}
         width={600}
         height={60}
-        className="mb-4 w-full rounded-lg bg-[#111110]"
+        className="mb-4 w-full rounded-lg bg-[#1A0A2E]"
       />
 
       <div className="flex items-center justify-between">
@@ -131,7 +131,7 @@ export default function StudioRecorder({ onRecordingComplete, onCancel }: Studio
             <button
               type="button"
               onClick={startRecording}
-              className="flex h-10 items-center gap-2 rounded-lg bg-[#FF2D2D] px-4 text-[12px] font-bold text-white transition hover:bg-[#FF4040]"
+              className="flex h-10 items-center gap-2 rounded-lg bg-[#FF3388] px-4 text-[12px] font-bold text-white transition hover:bg-[#FF4040]"
             >
               <Circle className="h-3 w-3 fill-current" />
               Start Recording
@@ -140,7 +140,7 @@ export default function StudioRecorder({ onRecordingComplete, onCancel }: Studio
             <button
               type="button"
               onClick={stopRecording}
-              className="flex h-10 items-center gap-2 rounded-lg bg-[#FF2D2D] px-4 text-[12px] font-bold text-white transition hover:bg-[#FF4040]"
+              className="flex h-10 items-center gap-2 rounded-lg bg-[#FF3388] px-4 text-[12px] font-bold text-white transition hover:bg-[#FF4040]"
             >
               <Square className="h-3 w-3" />
               Stop
@@ -148,7 +148,7 @@ export default function StudioRecorder({ onRecordingComplete, onCancel }: Studio
           )}
 
           {recording && (
-            <span className="font-mono text-[14px] text-[#F0EDE8]">
+            <span className="font-mono text-[14px] text-[#E0D0F0]">
               {formatTime(elapsed)}
             </span>
           )}
@@ -157,7 +157,7 @@ export default function StudioRecorder({ onRecordingComplete, onCancel }: Studio
         <button
           type="button"
           onClick={onCancel}
-          className="text-[11px] text-[#3A3632] hover:text-[#6B6560] transition"
+          className="text-[11px] text-[#4A3F60] hover:text-[#8A7FA8] transition"
         >
           Cancel
         </button>

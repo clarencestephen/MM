@@ -64,7 +64,7 @@ def _build_als_xml(session, samples_dir: Path) -> ET.Element:
     ableton = ET.Element("Ableton")
     ableton.set("MajorVersion", "5")
     ableton.set("MinorVersion", "11.0.0")
-    ableton.set("Creator", "MM Music Maker")
+    ableton.set("Creator", "MM")
 
     live_set = ET.SubElement(ableton, "LiveSet")
 

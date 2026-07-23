@@ -1,4 +1,4 @@
-# MM — Music Maker
+# MM
 
 AI-native Hip Hop music creation platform. **100% local. Zero API calls. Proprietary — private repo.**
 
@@ -39,8 +39,8 @@ docker-compose up -d db redis ollama
 pip install -r requirements.txt
 pip install -r requirements-models.txt  # ML models (optional, has fallbacks)
 
-# 4. Create tables + run
-python scripts/create_tables.py
+# 4. Sync schema + run
+python scripts/migrate.py
 uvicorn backend.main:app --reload
 
 # Or all-in-one with Docker:
@@ -84,7 +84,7 @@ workers/
 storage/               # Local file storage (git-ignored)
 scripts/
   setup_models.py      # One-command model setup
-  create_tables.py     # DB initialization
+  migrate.py           # Idempotent schema sync (tables + missing columns)
 ```
 
 ## Key conventions

@@ -6,7 +6,7 @@ def test_root(client):
     resp = client.get("/")
     assert resp.status_code == 200
     data = resp.json()
-    assert data["name"] == "MM \u2014 Music Maker"
+    assert data["name"] == "MM"
     assert data["api_calls"] == "zero"
     assert "version" in data
 

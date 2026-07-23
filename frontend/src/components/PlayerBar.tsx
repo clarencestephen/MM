@@ -130,36 +130,36 @@ export default function PlayerBar() {
       <div
         ref={barRef}
         onClick={seek}
-        className="group relative h-1 cursor-pointer bg-[#111110] transition-all hover:h-1.5"
+        className="group relative h-1 cursor-pointer bg-[#1A0A2E] transition-all hover:h-1.5"
       >
         <div
-          className="h-full bg-[#FF6B35] transition-all"
+          className="h-full bg-[#B432FF] transition-all"
           style={{ width: `${progress}%` }}
         />
       </div>
 
       {/* Player content */}
-      <div className="flex h-16 items-center gap-4 bg-[#050504]/95 px-4 backdrop-blur-xl sm:px-6 border-t border-[#111110]">
+      <div className="flex h-16 items-center gap-4 bg-[#050504]/95 px-4 backdrop-blur-xl sm:px-6 border-t border-[#1A0A2E]">
         {/* NOW PLAYING label + song info */}
         <div className="flex min-w-0 flex-1 items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#FF6B35]/10">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#B432FF]/10">
             {isPlaying ? (
               <div className="flex items-end gap-[2px] h-5">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="waveform-bar w-[2px] rounded-full bg-[#FF6B35]" style={{ height: "3px" }} />
+                  <div key={i} className="waveform-bar w-[2px] rounded-full bg-[#B432FF]" style={{ height: "3px" }} />
                 ))}
               </div>
             ) : (
-              <Play className="h-4 w-4 text-[#FF6B35]/50 ml-0.5" />
+              <Play className="h-4 w-4 text-[#B432FF]/50 ml-0.5" />
             )}
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-[#FF6B35]">
+              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-[#B432FF]">
                 Now Playing
               </span>
             </div>
-            <p className="truncate text-[13px] font-semibold text-[#F0EDE8]">
+            <p className="truncate text-[13px] font-semibold text-[#E0D0F0]">
               {song.title}
             </p>
           </div>
@@ -168,26 +168,26 @@ export default function PlayerBar() {
         {/* Controls */}
         <div className="flex items-center gap-1.5">
           <button type="button" onClick={() => { if (audioRef.current) audioRef.current.currentTime = 0; }}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-[#3A3632] transition hover:text-[#6B6560]">
+            className="flex h-8 w-8 items-center justify-center rounded-full text-[#4A3F60] transition hover:text-[#8A7FA8]">
             <SkipBack className="h-4 w-4" />
           </button>
           <button type="button" onClick={togglePlay}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FF6B35] text-black transition hover:bg-[#FF8555]">
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#B432FF] text-white transition hover:bg-[#C758FF]">
             {isPlaying ? <Pause className="h-4.5 w-4.5" /> : <Play className="h-4.5 w-4.5 ml-0.5" />}
           </button>
         </div>
 
         {/* Time + Volume + Close */}
         <div className="flex items-center gap-2">
-          <span className="hidden sm:inline text-[11px] font-mono tabular-nums text-[#6B6560]">
+          <span className="hidden sm:inline text-[11px] font-mono tabular-nums text-[#8A7FA8]">
             {formatTime(currentTime)} / {formatTime(duration)}
           </span>
           <button type="button" onClick={() => { setMuted(!muted); if (audioRef.current) audioRef.current.muted = !muted; }}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-[#3A3632] transition hover:text-[#6B6560]">
+            className="flex h-8 w-8 items-center justify-center rounded-full text-[#4A3F60] transition hover:text-[#8A7FA8]">
             {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
           </button>
           <button type="button" onClick={close}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-[#3A3632] transition hover:text-[#6B6560]">
+            className="flex h-8 w-8 items-center justify-center rounded-full text-[#4A3F60] transition hover:text-[#8A7FA8]">
             <X className="h-4 w-4" />
           </button>
         </div>

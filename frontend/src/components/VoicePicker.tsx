@@ -23,9 +23,13 @@ interface VoiceEngine {
 }
 
 export interface VoiceSelection {
-  engine: "xtts" | "azure" | "recorded";
+  engine: "xtts" | "azure" | "elevenlabs" | "recorded" | "described";
   azureVoice?: string;
+  elevenLabsVoiceId?: string;
+  elevenLabsVoiceName?: string;
+  personaId?: string;  // when picked from saved personas
   voiceClipPath?: string;
+  description?: string;
 }
 
 interface VoicePickerProps {
@@ -107,8 +111,8 @@ export default function VoicePicker({ value, onChange }: VoicePickerProps) {
         onClick={() => setExpanded(!expanded)}
         className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-[11px] font-medium transition ${
           value.engine !== "xtts"
-            ? "bg-[#FF6B35]/10 text-[#FF6B35]"
-            : "text-[#6B6560] hover:text-[#F0EDE8]"
+            ? "bg-[#B432FF]/10 text-[#B432FF]"
+            : "text-[#8A7FA8] hover:text-[#E0D0F0]"
         }`}
       >
         {value.engine === "azure" ? (
@@ -126,9 +130,9 @@ export default function VoicePicker({ value, onChange }: VoicePickerProps) {
 
       {/* Expanded: voice selection panel */}
       {expanded && (
-        <div className="mt-2 w-full max-w-md rounded-xl border border-[#1c1b18] bg-[#0a0a09] p-3 shadow-xl animate-fade-in">
+        <div className="mt-2 w-full max-w-md rounded-xl border border-[#2A1A4A] bg-[#0D0A14] p-3 shadow-xl animate-fade-in">
           {loading ? (
-            <p className="py-4 text-center text-[11px] text-[#3A3632]">
+            <p className="py-4 text-center text-[11px] text-[#4A3F60]">
               Loading voices...
             </p>
           ) : (
@@ -142,21 +146,21 @@ export default function VoicePicker({ value, onChange }: VoicePickerProps) {
                 }}
                 className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition ${
                   value.engine === "xtts"
-                    ? "bg-[#FF6B35]/10 border border-[#FF6B35]/20"
-                    : "hover:bg-[#111110] border border-transparent"
+                    ? "bg-[#B432FF]/10 border border-[#B432FF]/20"
+                    : "hover:bg-[#1A0A2E] border border-transparent"
                 }`}
               >
-                <Mic className="h-4 w-4 shrink-0 text-[#6B6560]" />
+                <Mic className="h-4 w-4 shrink-0 text-[#8A7FA8]" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-[12px] font-semibold text-[#F0EDE8]">
+                  <p className="text-[12px] font-semibold text-[#E0D0F0]">
                     Default Voice
                   </p>
-                  <p className="text-[10px] text-[#3A3632]">
+                  <p className="text-[10px] text-[#4A3F60]">
                     XTTS v2 — runs locally on your GPU
                   </p>
                 </div>
                 {value.engine === "xtts" && (
-                  <Check className="h-4 w-4 shrink-0 text-[#FF6B35]" />
+                  <Check className="h-4 w-4 shrink-0 text-[#B432FF]" />
                 )}
               </button>
 
@@ -165,22 +169,22 @@ export default function VoicePicker({ value, onChange }: VoicePickerProps) {
                 <div
                   className={`rounded-lg border transition ${
                     value.engine === "azure"
-                      ? "bg-[#FF6B35]/10 border-[#FF6B35]/20"
-                      : "border-transparent hover:bg-[#111110]"
+                      ? "bg-[#B432FF]/10 border-[#B432FF]/20"
+                      : "border-transparent hover:bg-[#1A0A2E]"
                   }`}
                 >
                   <div className="flex items-center gap-3 px-3 py-2.5">
-                    <Cloud className="h-4 w-4 shrink-0 text-[#6B6560]" />
+                    <Cloud className="h-4 w-4 shrink-0 text-[#8A7FA8]" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-[12px] font-semibold text-[#F0EDE8]">
+                      <p className="text-[12px] font-semibold text-[#E0D0F0]">
                         Cloud Voice
                       </p>
-                      <p className="text-[10px] text-[#3A3632]">
+                      <p className="text-[10px] text-[#4A3F60]">
                         Azure Neural TTS — high quality
                       </p>
                     </div>
                     {value.engine === "azure" && (
-                      <Check className="h-4 w-4 shrink-0 text-[#FF6B35]" />
+                      <Check className="h-4 w-4 shrink-0 text-[#B432FF]" />
                     )}
                   </div>
 
@@ -197,8 +201,8 @@ export default function VoicePicker({ value, onChange }: VoicePickerProps) {
                         className={`flex items-center gap-2 rounded-lg px-2.5 py-2 text-left transition ${
                           value.engine === "azure" &&
                           value.azureVoice === v.key
-                            ? "bg-[#FF6B35]/15 ring-1 ring-[#FF6B35]/30"
-                            : "bg-[#111110] hover:bg-[#191816]"
+                            ? "bg-[#B432FF]/15 ring-1 ring-[#B432FF]/30"
+                            : "bg-[#1A0A2E] hover:bg-[#241344]"
                         }`}
                       >
                         <span
@@ -211,10 +215,10 @@ export default function VoicePicker({ value, onChange }: VoicePickerProps) {
                           {v.gender === "male" ? "♂" : "♀"}
                         </span>
                         <div>
-                          <p className="text-[11px] font-semibold text-[#F0EDE8]">
+                          <p className="text-[11px] font-semibold text-[#E0D0F0]">
                             {v.name}
                           </p>
-                          <p className="text-[9px] text-[#3A3632]">
+                          <p className="text-[9px] text-[#4A3F60]">
                             {v.desc}
                           </p>
                         </div>
@@ -228,7 +232,7 @@ export default function VoicePicker({ value, onChange }: VoicePickerProps) {
               <div
                 className={`rounded-lg border transition ${
                   value.engine === "recorded"
-                    ? "bg-[#FF6B35]/10 border-[#FF6B35]/20"
+                    ? "bg-[#B432FF]/10 border-[#B432FF]/20"
                     : "border-transparent"
                 }`}
               >
@@ -236,25 +240,25 @@ export default function VoicePicker({ value, onChange }: VoicePickerProps) {
                   <button
                     type="button"
                     onClick={() => setShowRecorder(true)}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition hover:bg-[#111110]"
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition hover:bg-[#1A0A2E]"
                   >
-                    <Radio className="h-4 w-4 shrink-0 text-[#6B6560]" />
+                    <Radio className="h-4 w-4 shrink-0 text-[#8A7FA8]" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-[12px] font-semibold text-[#F0EDE8]">
+                      <p className="text-[12px] font-semibold text-[#E0D0F0]">
                         Record My Voice
                       </p>
-                      <p className="text-[10px] text-[#3A3632]">
+                      <p className="text-[10px] text-[#4A3F60]">
                         10–30s clip for voice cloning
                       </p>
                     </div>
                     {value.engine === "recorded" && (
-                      <Check className="h-4 w-4 shrink-0 text-[#FF6B35]" />
+                      <Check className="h-4 w-4 shrink-0 text-[#B432FF]" />
                     )}
                   </button>
                 ) : (
                   <div className="p-2">
                     {uploading ? (
-                      <p className="py-4 text-center text-[11px] text-[#6B6560]">
+                      <p className="py-4 text-center text-[11px] text-[#8A7FA8]">
                         Uploading voice clip...
                       </p>
                     ) : (

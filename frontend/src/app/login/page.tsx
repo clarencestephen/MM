@@ -29,13 +29,13 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center px-5">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#FF6B35]">
-            <span className="text-lg font-black text-black">M</span>
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#B432FF]">
+            <span className="text-lg font-black text-white">M</span>
           </div>
-          <h1 className="font-display text-[28px] font-light italic text-[#F0EDE8]">
+          <h1 className="font-display text-[28px] font-light italic text-[#E0D0F0]">
             Welcome back
           </h1>
-          <p className="mt-1 text-[13px] text-[#6B6560]">
+          <p className="mt-1 text-[13px] text-[#8A7FA8]">
             Log in to your account
           </p>
         </div>
@@ -47,7 +47,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
-            className="w-full rounded-xl border border-[#1c1b18] bg-[#0a0a09] px-4 py-3 text-[14px] text-[#F0EDE8] placeholder-[#3A3632] outline-none focus:border-[#FF6B35]/30"
+            className="w-full rounded-xl border border-[#2A1A4A] bg-[#0D0A14] px-4 py-3 text-[14px] text-[#E0D0F0] placeholder-[#4A3F60] outline-none focus:border-[#B432FF]/30"
           />
           <input
             type="password"
@@ -55,7 +55,7 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            className="w-full rounded-xl border border-[#1c1b18] bg-[#0a0a09] px-4 py-3 text-[14px] text-[#F0EDE8] placeholder-[#3A3632] outline-none focus:border-[#FF6B35]/30"
+            className="w-full rounded-xl border border-[#2A1A4A] bg-[#0D0A14] px-4 py-3 text-[14px] text-[#E0D0F0] placeholder-[#4A3F60] outline-none focus:border-[#B432FF]/30"
           />
 
           {error && (
@@ -67,7 +67,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={submitting || !email || !password}
-            className="w-full rounded-xl bg-[#FF6B35] py-3 text-[14px] font-bold text-black transition hover:bg-[#FF8555] disabled:opacity-30"
+            className="w-full rounded-xl bg-[#B432FF] py-3 text-[14px] font-bold text-white transition hover:bg-[#C758FF] disabled:opacity-30"
           >
             {submitting ? (
               <Loader2 className="mx-auto h-5 w-5 animate-spin" />
@@ -77,9 +77,9 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-[12px] text-[#3A3632]">
+        <p className="mt-6 text-center text-[12px] text-[#4A3F60]">
           Don't have an account?{" "}
-          <Link href="/signup" className="text-[#FF6B35] hover:underline">
+          <Link href="/signup" className="text-[#B432FF] hover:underline">
             Sign up free
           </Link>
         </p>

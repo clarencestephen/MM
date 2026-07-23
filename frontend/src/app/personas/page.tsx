@@ -241,7 +241,7 @@ function CreatePersonaModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07060B]/60 backdrop-blur-sm">
       <div className="mx-4 w-full max-w-md rounded-xl border border-zinc-800 bg-zinc-900 p-6 shadow-2xl">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">

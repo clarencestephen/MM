@@ -64,20 +64,20 @@ export default function OnboardingPage() {
         {/* Step 0: Welcome */}
         {step === 0 && (
           <div className="text-center animate-fade-up">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#FF6B35]/10">
-              <Music className="h-8 w-8 text-[#FF6B35]" />
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#B432FF]/10">
+              <Music className="h-8 w-8 text-[#B432FF]" />
             </div>
-            <h1 className="font-display text-[32px] font-light italic text-[#F0EDE8]">
+            <h1 className="font-display text-[32px] font-light italic text-[#E0D0F0]">
               Hey {firstName}!
             </h1>
-            <p className="mt-3 text-[14px] text-[#6B6560] max-w-xs mx-auto leading-relaxed">
+            <p className="mt-3 text-[14px] text-[#8A7FA8] max-w-xs mx-auto leading-relaxed">
               Let's make your first song. It takes about 60 seconds.
               Just hum, tap, or sing — we'll turn it into music.
             </p>
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#FF6B35] px-8 py-3.5 text-[14px] font-bold text-black transition hover:bg-[#FF8555] active:scale-95"
+              className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#B432FF] px-8 py-3.5 text-[14px] font-bold text-white transition hover:bg-[#C758FF] active:scale-95"
             >
               Let's go
               <ArrowRight className="h-4 w-4" />
@@ -88,10 +88,10 @@ export default function OnboardingPage() {
         {/* Step 1: Name your session */}
         {step === 1 && (
           <div className="animate-fade-up">
-            <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-[#3A3632]">
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-[#4A3F60]">
               Step 1 of 2
             </p>
-            <h2 className="font-display text-[28px] font-light italic text-[#F0EDE8] mb-6">
+            <h2 className="font-display text-[28px] font-light italic text-[#E0D0F0] mb-6">
               Name your session
             </h2>
             <input
@@ -100,20 +100,20 @@ export default function OnboardingPage() {
               value={sessionName}
               onChange={(e) => setSessionName(e.target.value)}
               placeholder="My banger, Late night vibes, Beat lab..."
-              className="w-full rounded-xl border border-[#1c1b18] bg-[#0a0a09] px-5 py-4 text-[16px] text-[#F0EDE8] placeholder-[#3A3632] outline-none focus:border-[#FF6B35]/30"
+              className="w-full rounded-xl border border-[#2A1A4A] bg-[#0D0A14] px-5 py-4 text-[16px] text-[#E0D0F0] placeholder-[#4A3F60] outline-none focus:border-[#B432FF]/30"
               onKeyDown={(e) => e.key === "Enter" && setStep(2)}
             />
             <button
               type="button"
               onClick={() => setStep(2)}
-              className="mt-5 w-full rounded-xl bg-[#FF6B35] py-3.5 text-[14px] font-bold text-black transition hover:bg-[#FF8555]"
+              className="mt-5 w-full rounded-xl bg-[#B432FF] py-3.5 text-[14px] font-bold text-white transition hover:bg-[#C758FF]"
             >
               Next
             </button>
             <button
               type="button"
               onClick={() => setStep(2)}
-              className="mt-3 w-full text-center text-[12px] text-[#3A3632] hover:text-[#6B6560]"
+              className="mt-3 w-full text-center text-[12px] text-[#4A3F60] hover:text-[#8A7FA8]"
             >
               Skip — name it later
             </button>
@@ -123,10 +123,10 @@ export default function OnboardingPage() {
         {/* Step 2: Pick your vibe */}
         {step === 2 && (
           <div className="animate-fade-up">
-            <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-[#3A3632]">
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-[#4A3F60]">
               Step 2 of 2
             </p>
-            <h2 className="font-display text-[28px] font-light italic text-[#F0EDE8] mb-6">
+            <h2 className="font-display text-[28px] font-light italic text-[#E0D0F0] mb-6">
               Pick the vibe
             </h2>
 
@@ -138,8 +138,8 @@ export default function OnboardingPage() {
                   onClick={() => setGenre(g.value)}
                   className={`flex items-center gap-2 rounded-xl border px-4 py-3 text-[13px] font-semibold transition active:scale-95 ${
                     genre === g.value
-                      ? "border-[#FF6B35]/40 bg-[#FF6B35]/[0.06] text-[#FF6B35]"
-                      : "border-[#1c1b18] bg-[#0a0a09] text-[#6B6560] hover:text-[#F0EDE8]"
+                      ? "border-[#B432FF]/40 bg-[#B432FF]/[0.06] text-[#B432FF]"
+                      : "border-[#2A1A4A] bg-[#0D0A14] text-[#8A7FA8] hover:text-[#E0D0F0]"
                   }`}
                 >
                   <span className="text-lg">{g.emoji}</span>
@@ -156,8 +156,8 @@ export default function OnboardingPage() {
                   onClick={() => setMood(m.value)}
                   className={`flex-1 rounded-lg py-2 text-[11px] font-semibold transition ${
                     mood === m.value
-                      ? "bg-[#FF6B35]/10 text-[#FF6B35]"
-                      : "text-[#3A3632] hover:text-[#6B6560]"
+                      ? "bg-[#B432FF]/10 text-[#B432FF]"
+                      : "text-[#4A3F60] hover:text-[#8A7FA8]"
                   }`}
                 >
                   {m.label}
@@ -169,7 +169,7 @@ export default function OnboardingPage() {
               type="button"
               disabled={creating}
               onClick={handleFinish}
-              className="w-full rounded-xl bg-[#FF6B35] py-3.5 text-[14px] font-bold text-black transition hover:bg-[#FF8555] disabled:opacity-30 flex items-center justify-center gap-2"
+              className="w-full rounded-xl bg-[#B432FF] py-3.5 text-[14px] font-bold text-white transition hover:bg-[#C758FF] disabled:opacity-30 flex items-center justify-center gap-2"
             >
               {creating ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -189,7 +189,7 @@ export default function OnboardingPage() {
             <div
               key={i}
               className={`h-1.5 rounded-full transition-all ${
-                i === step ? "w-6 bg-[#FF6B35]" : "w-1.5 bg-[#1c1b18]"
+                i === step ? "w-6 bg-[#B432FF]" : "w-1.5 bg-[#2A1A4A]"
               }`}
             />
           ))}

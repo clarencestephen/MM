@@ -20,12 +20,12 @@ const FEATURES = [
 
 function FeatureCheck({ value }: { value: boolean | string }) {
   if (typeof value === "string") {
-    return <span className="text-[12px] text-[#F0EDE8]">{value}</span>;
+    return <span className="text-[12px] text-[#E0D0F0]">{value}</span>;
   }
   return value ? (
     <Check className="h-4 w-4 text-emerald-500" />
   ) : (
-    <X className="h-4 w-4 text-[#231F1C]" />
+    <X className="h-4 w-4 text-[#2D2640]" />
   );
 }
 
@@ -35,10 +35,10 @@ export default function PricingPage() {
       <div className="mx-auto max-w-3xl px-5 pt-16 sm:px-6">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="font-display text-[42px] font-light italic text-[#F0EDE8]">
+          <h1 className="font-display text-[42px] font-light italic text-[#E0D0F0]">
             Simple pricing
           </h1>
-          <p className="mt-2 text-[14px] text-[#6B6560]">
+          <p className="mt-2 text-[14px] text-[#8A7FA8]">
             Start free. Go Pro when you need more power.
           </p>
         </div>
@@ -46,40 +46,40 @@ export default function PricingPage() {
         {/* Plans */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-12">
           {/* Free */}
-          <div className="rounded-2xl border border-[#1c1b18] bg-[#0a0a09] p-6">
-            <h3 className="text-[18px] font-bold text-[#F0EDE8]">Free</h3>
+          <div className="rounded-2xl border border-[#2A1A4A] bg-[#0D0A14] p-6">
+            <h3 className="text-[18px] font-bold text-[#E0D0F0]">Free</h3>
             <div className="mt-2 flex items-baseline gap-1">
-              <span className="text-[36px] font-bold text-[#F0EDE8]">$0</span>
-              <span className="text-[13px] text-[#3A3632]">/forever</span>
+              <span className="text-[36px] font-bold text-[#E0D0F0]">$0</span>
+              <span className="text-[13px] text-[#4A3F60]">/forever</span>
             </div>
-            <p className="mt-2 text-[12px] text-[#6B6560]">
+            <p className="mt-2 text-[12px] text-[#8A7FA8]">
               Get started making music. No credit card needed.
             </p>
             <Link
               href="/signup"
-              className="mt-6 block rounded-xl border border-[#1c1b18] bg-[#111110] py-3 text-center text-[13px] font-semibold text-[#F0EDE8] transition hover:border-[#2a2923]"
+              className="mt-6 block rounded-xl border border-[#2A1A4A] bg-[#1A0A2E] py-3 text-center text-[13px] font-semibold text-[#E0D0F0] transition hover:border-[#3D2466]"
             >
               Sign Up Free
             </Link>
           </div>
 
           {/* Pro */}
-          <div className="rounded-2xl border-2 border-[#FF6B35]/40 bg-[#FF6B35]/[0.03] p-6 relative">
-            <div className="absolute -top-3 left-6 flex items-center gap-1 rounded-full bg-[#FF6B35] px-3 py-1 text-[10px] font-bold text-black">
+          <div className="rounded-2xl border-2 border-[#B432FF]/40 bg-[#B432FF]/[0.03] p-6 relative">
+            <div className="absolute -top-3 left-6 flex items-center gap-1 rounded-full bg-[#B432FF] px-3 py-1 text-[10px] font-bold text-white">
               <Sparkles className="h-3 w-3" />
               MOST POPULAR
             </div>
-            <h3 className="text-[18px] font-bold text-[#F0EDE8]">Pro</h3>
+            <h3 className="text-[18px] font-bold text-[#E0D0F0]">Pro</h3>
             <div className="mt-2 flex items-baseline gap-1">
-              <span className="text-[36px] font-bold text-[#F0EDE8]">$10</span>
-              <span className="text-[13px] text-[#6B6560]">/month</span>
+              <span className="text-[36px] font-bold text-[#E0D0F0]">$10</span>
+              <span className="text-[13px] text-[#8A7FA8]">/month</span>
             </div>
-            <p className="mt-2 text-[12px] text-[#6B6560]">
+            <p className="mt-2 text-[12px] text-[#8A7FA8]">
               Unlimited tracks, custom instruments, pro exports.
             </p>
             <Link
               href="/signup"
-              className="mt-6 block rounded-xl bg-[#FF6B35] py-3 text-center text-[13px] font-bold text-black transition hover:bg-[#FF8555]"
+              className="mt-6 block rounded-xl bg-[#B432FF] py-3 text-center text-[13px] font-bold text-white transition hover:bg-[#C758FF]"
             >
               Start Pro
             </Link>
@@ -87,24 +87,24 @@ export default function PricingPage() {
         </div>
 
         {/* Feature comparison */}
-        <div className="rounded-2xl border border-[#1c1b18] bg-[#0a0a09] overflow-hidden">
-          <div className="grid grid-cols-3 gap-4 border-b border-[#1c1b18] px-6 py-4">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-[#3A3632]">
+        <div className="rounded-2xl border border-[#2A1A4A] bg-[#0D0A14] overflow-hidden">
+          <div className="grid grid-cols-3 gap-4 border-b border-[#2A1A4A] px-6 py-4">
+            <span className="text-[11px] font-bold uppercase tracking-widest text-[#4A3F60]">
               Feature
             </span>
-            <span className="text-center text-[11px] font-bold uppercase tracking-widest text-[#3A3632]">
+            <span className="text-center text-[11px] font-bold uppercase tracking-widest text-[#4A3F60]">
               Free
             </span>
-            <span className="text-center text-[11px] font-bold uppercase tracking-widest text-[#FF6B35]">
+            <span className="text-center text-[11px] font-bold uppercase tracking-widest text-[#B432FF]">
               Pro
             </span>
           </div>
           {FEATURES.map((f) => (
             <div
               key={f.name}
-              className="grid grid-cols-3 gap-4 border-b border-[#0f0e0c] px-6 py-3 last:border-0"
+              className="grid grid-cols-3 gap-4 border-b border-[#1A0A2E] px-6 py-3 last:border-0"
             >
-              <span className="text-[13px] text-[#6B6560]">{f.name}</span>
+              <span className="text-[13px] text-[#8A7FA8]">{f.name}</span>
               <div className="flex justify-center">
                 <FeatureCheck value={f.free} />
               </div>
@@ -117,7 +117,7 @@ export default function PricingPage() {
 
         {/* Bottom CTA */}
         <div className="mt-8 text-center">
-          <p className="text-[12px] text-[#3A3632]">
+          <p className="text-[12px] text-[#4A3F60]">
             Everything runs on your machine. Zero API calls. Your music, your data.
           </p>
         </div>

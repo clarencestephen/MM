@@ -1,7 +1,12 @@
 """Alignment Service — dual-mode lyrics-to-audio alignment. 100% local.
 
-Mode 1 (TRANSCRIBE): WhisperX — when we DON'T have lyrics.
+Mode 1 (TRANSCRIBE): WhisperX (microservice) — when we DON'T have lyrics.
     Extracts text + word-level timestamps from vocal audio.
+
+    WhisperX runs as a sidecar FastAPI service in its own conda env
+    (`mm-whisper`) on :8100 because its deps (numpy 2.x, torch 2.8, pandas 3.x)
+    are incompatible with the main MM env's TTS + seed-vc stack. This module
+    calls it over HTTP. See `whisper_service/main.py`.
 
 Mode 2 (ALIGN): torchaudio forced_align — when we DO have lyrics.
     Aligns known text to audio for parody timing preservation.
@@ -10,6 +15,7 @@ Mode 2 (ALIGN): torchaudio forced_align — when we DO have lyrics.
 Both modes run on GPU 1 (audio GPU) per the dual-GPU strategy.
 """
 import logging
+import os
 import uuid
 from pathlib import Path
 
@@ -18,9 +24,51 @@ from backend.services import cache_service
 
 log = logging.getLogger(__name__)
 
+WHISPER_SERVICE_URL = os.environ.get(
+    "WHISPER_SERVICE_URL",
+    getattr(settings, "whisper_service_url", "http://localhost:8100"),
+)
+WHISPER_SERVICE_TIMEOUT = float(os.environ.get("WHISPER_SERVICE_TIMEOUT", "300"))
+
+
+def _whisper_post(endpoint: str, audio_path: str, extra_fields: dict | None = None) -> dict | None:
+    """POST a file to the WhisperX microservice. Returns parsed JSON or None on failure."""
+    try:
+        import requests
+    except ImportError:
+        log.warning("requests not installed; cannot reach whisper service")
+        return None
+
+    url = WHISPER_SERVICE_URL.rstrip("/") + endpoint
+    try:
+        with open(audio_path, "rb") as f:
+            files = {"file": (Path(audio_path).name, f, "application/octet-stream")}
+            data = extra_fields or {}
+            resp = requests.post(url, files=files, data=data, timeout=WHISPER_SERVICE_TIMEOUT)
+        if resp.status_code != 200:
+            log.warning(
+                "Whisper service %s returned %s: %s",
+                endpoint, resp.status_code, resp.text[:300],
+            )
+            return None
+        return resp.json()
+    except requests.exceptions.ConnectionError:
+        log.warning(
+            "Whisper service unreachable at %s. Start it with: "
+            "./scripts/run_whisper_service.sh",
+            WHISPER_SERVICE_URL,
+        )
+        return None
+    except Exception as e:
+        log.warning("Whisper service call failed: %s", e)
+        return None
+
 
 def transcribe_with_timestamps(audio_path: str) -> dict:
     """Mode 1: Transcribe audio and get word-level timestamps using WhisperX.
+
+    Calls the `mm-whisper` HTTP microservice (default http://localhost:8100).
+    Override via WHISPER_SERVICE_URL env var.
 
     Returns:
         {
@@ -34,51 +82,31 @@ def transcribe_with_timestamps(audio_path: str) -> dict:
         log.info("Transcript cache hit")
         return cached
 
-    try:
-        import whisperx
-        import torch
-
-        device = f"cuda:{settings.gpu_audio}" if torch.cuda.is_available() else "cpu"
-
-        # Use preloaded models if available (instant)
-        from backend.services.model_manager import models as model_mgr
-        wx_model, wx_align, wx_meta = model_mgr.get_whisperx()
-
-        if wx_model is None:
-            wx_model = whisperx.load_model("large-v3", device, compute_type="float16")
-        if wx_align is None:
-            wx_align, wx_meta = whisperx.load_align_model(
-                language_code="en", device=device
-            )
-
-        audio = whisperx.load_audio(audio_path)
-        result = wx_model.transcribe(audio, batch_size=16)
-
-        result = whisperx.align(
-            result["segments"], wx_align, wx_meta, audio, device,
-            return_char_alignments=False,
-        )
-
-        # Flatten to word list
-        words = []
-        for segment in result.get("segments", []):
-            for w in segment.get("words", []):
-                words.append({
-                    "word": w.get("word", ""),
-                    "start": w.get("start", 0),
-                    "end": w.get("end", 0),
-                })
-
-        full_text = " ".join(w["word"] for w in words)
-        output = {"text": full_text, "words": words}
-
-        # Cache it
-        cache_service.put("transcript", audio_path, data=output)
-        return output
-
-    except ImportError:
-        log.warning("WhisperX not installed. Install: pip install git+https://github.com/m-bain/whisperX.git")
+    response = _whisper_post("/transcribe", audio_path)
+    if response is None:
         return _stub_transcription(audio_path)
+
+    # Flatten word list from segments for backwards compatibility with callers
+    # that expect the legacy {text, words} shape.
+    words = []
+    for segment in response.get("segments", []):
+        for w in segment.get("words", []):
+            words.append({
+                "word": w.get("word", ""),
+                "start": w.get("start", 0),
+                "end": w.get("end", 0),
+            })
+
+    output = {
+        "text": response.get("text") or " ".join(w["word"] for w in words),
+        "words": words,
+        # Preserve segments + language for newer callers that want them.
+        "segments": response.get("segments", []),
+        "language": response.get("language"),
+    }
+
+    cache_service.put("transcript", audio_path, data=output)
+    return output
 
 
 def align_lyrics_to_audio(audio_path: str, lyrics: str) -> list[dict]:
@@ -208,10 +236,15 @@ def _tokens_to_words(
 
 
 def _stub_transcription(audio_path: str) -> dict:
-    """Stub transcription when WhisperX isn't installed."""
+    """Stub transcription when the WhisperX microservice is unavailable."""
     return {
-        "text": "[transcription requires WhisperX — install with: pip install git+https://github.com/m-bain/whisperX.git]",
+        "text": (
+            "[transcription requires the WhisperX microservice — "
+            "start with: ./scripts/run_whisper_service.sh]"
+        ),
         "words": [],
+        "segments": [],
+        "language": None,
     }
 
 

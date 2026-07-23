@@ -87,20 +87,20 @@ export default function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderPro
     `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
   return (
-    <div className="rounded-xl border border-[#1c1b18] bg-[#0a0a09] p-4">
+    <div className="rounded-xl border border-[#2A1A4A] bg-[#0D0A14] p-4">
       {error && (
         <p className="mb-3 text-[11px] text-red-400">{error}</p>
       )}
 
       {state === "idle" && (
         <div className="text-center">
-          <p className="mb-3 text-[12px] text-[#6B6560]">
+          <p className="mb-3 text-[12px] text-[#8A7FA8]">
             Record 10–30 seconds of your voice. Read any text or rap some bars.
           </p>
           <button
             type="button"
             onClick={startRecording}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#FF2D2D] px-5 py-2.5 text-[13px] font-bold text-white transition hover:bg-[#FF4444]"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#FF3388] px-5 py-2.5 text-[13px] font-bold text-white transition hover:bg-[#FF4444]"
           >
             <Mic className="h-4 w-4" />
             Start Recording
@@ -113,22 +113,22 @@ export default function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderPro
           {/* Pulsing red dot */}
           <div className="mx-auto mb-3 flex items-center justify-center gap-2">
             <div
-              className="h-3 w-3 rounded-full bg-[#FF2D2D]"
+              className="h-3 w-3 rounded-full bg-[#FF3388]"
               style={{ animation: "recording-pulse 1.5s ease-in-out infinite" }}
             />
-            <span className="font-mono text-[20px] font-bold tabular-nums text-[#F0EDE8]">
+            <span className="font-mono text-[20px] font-bold tabular-nums text-[#E0D0F0]">
               {formatTime(seconds)}
             </span>
           </div>
-          <p className="mb-3 text-[11px] text-[#6B6560]">
+          <p className="mb-3 text-[11px] text-[#8A7FA8]">
             {seconds < 10
               ? "Keep going... need at least 10 seconds"
               : "Good! You can stop anytime."}
           </p>
           {/* Progress bar showing 0-30s */}
-          <div className="mx-auto mb-4 h-1 w-48 overflow-hidden rounded-full bg-[#1c1b18]">
+          <div className="mx-auto mb-4 h-1 w-48 overflow-hidden rounded-full bg-[#2A1A4A]">
             <div
-              className="h-full rounded-full bg-[#FF2D2D] transition-all"
+              className="h-full rounded-full bg-[#FF3388] transition-all"
               style={{ width: `${Math.min(100, (seconds / 30) * 100)}%` }}
             />
           </div>
@@ -136,7 +136,7 @@ export default function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderPro
             type="button"
             onClick={stopRecording}
             disabled={seconds < 3}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#1c1b18] px-5 py-2.5 text-[13px] font-bold text-[#F0EDE8] transition hover:bg-[#2a2923] disabled:opacity-30"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#2A1A4A] px-5 py-2.5 text-[13px] font-bold text-[#E0D0F0] transition hover:bg-[#3D2466] disabled:opacity-30"
           >
             <Square className="h-3.5 w-3.5" />
             Stop
@@ -164,7 +164,7 @@ export default function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderPro
             <button
               type="button"
               onClick={reset}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#1c1b18] px-3 py-2 text-[11px] font-medium text-[#6B6560] transition hover:text-[#F0EDE8]"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#2A1A4A] px-3 py-2 text-[11px] font-medium text-[#8A7FA8] transition hover:text-[#E0D0F0]"
             >
               <RotateCcw className="h-3 w-3" />
               Re-record
@@ -172,7 +172,7 @@ export default function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderPro
             <button
               type="button"
               onClick={confirm}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#FF6B35] px-4 py-2 text-[11px] font-bold text-black transition hover:bg-[#FF8555]"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#B432FF] px-4 py-2 text-[11px] font-bold text-white transition hover:bg-[#C758FF]"
             >
               <CheckCircle2 className="h-3 w-3" />
               Use This Voice
@@ -180,7 +180,7 @@ export default function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderPro
             <button
               type="button"
               onClick={onCancel}
-              className="text-[11px] text-[#3A3632] transition hover:text-[#6B6560]"
+              className="text-[11px] text-[#4A3F60] transition hover:text-[#8A7FA8]"
             >
               Cancel
             </button>

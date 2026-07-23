@@ -70,7 +70,7 @@ def client(db_session):
 @pytest.fixture()
 def sample_project(client):
     """Create a project + auto-user for reuse."""
-    resp = client.post("/api/projects/", json={
+    resp = client.post("/api/projects", json={
         "title": "Test Project",
         "description": "For testing",
         "user_id": "test-user-1",
@@ -82,7 +82,7 @@ def sample_project(client):
 @pytest.fixture()
 def sample_song(client, sample_project):
     """Create a song with lyrics inside the sample project."""
-    resp = client.post("/api/songs/", json={
+    resp = client.post("/api/songs", json={
         "title": "Test Song",
         "lyrics": "[Verse]\nFirst line of the verse\nSecond line of the verse\n\n[Hook]\nThis is the hook yeah\nCatchy line right here",
         "genre": "hip_hop",
@@ -96,11 +96,11 @@ def sample_song(client, sample_project):
 def sample_persona(client):
     """Create a persona for testing."""
     # Need a user first — create via project (auto-creates user)
-    client.post("/api/projects/", json={
+    client.post("/api/projects", json={
         "title": "Setup Project",
         "user_id": "test-user-1",
     })
-    resp = client.post("/api/personas/", json={
+    resp = client.post("/api/personas", json={
         "name": "Test MC",
         "description": "Test rap persona",
         "style_mode": "rap",

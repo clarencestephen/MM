@@ -11,7 +11,7 @@ from backend.services.export_service import export_wav, export_mp3
 router = APIRouter(prefix="/export", tags=["export"])
 
 
-@router.post("/", response_model=ExportResponse)
+@router.post("", response_model=ExportResponse)
 def export_song(data: ExportRequest, db: Session = Depends(get_db)):
     """Export a song as WAV or MP3."""
     song = db.query(Song).filter(Song.id == data.song_id).first()

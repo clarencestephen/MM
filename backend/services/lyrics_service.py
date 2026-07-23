@@ -39,11 +39,26 @@ def generate_lyrics(
     genre: str = "hip_hop",
     mood: str = "chill",
     quality: str = "draft",
+    style_tags: list[str] | None = None,
 ) -> str:
-    """Generate full song lyrics from a prompt using local LLM."""
+    """Generate full song lyrics from a prompt using local LLM.
+
+    `style_tags` are stackable Style Mixer chips picked in the UI (era /
+    instruments / energy). When present, they're injected as a Style direction
+    line so the LLM sculpts vocabulary, imagery, and cadence around them.
+    """
+    style_line = ""
+    if style_tags:
+        cleaned = [t.strip() for t in style_tags if t and t.strip()]
+        if cleaned:
+            style_line = (
+                f"\n\nStyle direction: {', '.join(cleaned)}. "
+                "Lean into these references in word choice, imagery, and cadence."
+            )
+
     user_prompt = f"""Write a complete {genre.replace('_', ' ')} song with a {mood} mood.
 
-Theme/concept: {prompt}
+Theme/concept: {prompt}{style_line}
 
 Include: [Intro], [Verse 1], [Hook], [Verse 2], [Hook], [Outro]"""
 
@@ -161,7 +176,7 @@ Install it and pull qwen2.5:14b for the real thing
 Then watch this platform start delivering
 
 [Hook]
-MM Music Maker, making hits all day
+MM in the booth, making hits all day
 Local AI, no API, that's the way we play
 Every beat, every bar, every single line
 All running on your GPU, and it works just fine

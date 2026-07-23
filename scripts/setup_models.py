@@ -16,7 +16,7 @@ import shutil
 
 def main():
     print("=" * 60)
-    print("MM — Music Maker: Model Setup")
+    print("MM: Model Setup")
     print("=" * 60)
 
     # 1. Check Ollama

@@ -1,5 +1,5 @@
 """Generation routes — Pipeline 1 with draft/render modes + region regeneration."""
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from backend.database import get_db
@@ -19,7 +19,7 @@ from backend.services.lyrics_service import generate_lyrics, rewrite_parody, rew
 router = APIRouter(prefix="/generate", tags=["generate"])
 
 
-@router.post("/", response_model=GenerateResponse)
+@router.post("", response_model=GenerateResponse)
 def generate_song(data: GenerateRequest, db: Session = Depends(get_db)):
     """Generate vocals from lyrics and mix with beat.
 
@@ -66,6 +66,7 @@ def generate_song(data: GenerateRequest, db: Session = Depends(get_db)):
             "quality": data.quality,
             "section": data.section,
             "style": song.genre or "hip_hop",
+            "style_tags": data.style_tags or [],
         },
         song_id=song.id,
     )
@@ -74,6 +75,18 @@ def generate_song(data: GenerateRequest, db: Session = Depends(get_db)):
 
     try:
         vocal_style = "rap" if song.genre in ("hip_hop", "melodic_rap") else "melodic"
+
+        # ── Persona promotion: an ElevenLabs persona overrides voice_engine ──
+        # If the caller passed a persona_id whose stored voice is on ElevenLabs,
+        # promote the request to engine=elevenlabs with that voice_id. Lets
+        # users pick a saved persona and Just Have It Work without thinking
+        # about engines.
+        persona_obj = None
+        if data.persona_id:
+            persona_obj = db.query(Persona).filter(Persona.id == data.persona_id).first()
+            if persona_obj and persona_obj.voice_engine == "elevenlabs" and persona_obj.elevenlabs_voice_id:
+                data.voice_engine = "elevenlabs"
+                data.elevenlabs_voice_id = persona_obj.elevenlabs_voice_id
 
         # ── Voice engine routing ──────────────────────────────────
         if data.voice_engine == "azure":
@@ -86,6 +99,25 @@ def generate_song(data: GenerateRequest, db: Session = Depends(get_db)):
                 voice_key=data.azure_voice or "davis",
                 quality=data.quality,
             )
+        elif data.voice_engine == "elevenlabs":
+            # ElevenLabs — Pro tier only. We check via the song's project owner.
+            from backend.services.elevenlabs_service import (
+                synthesize as eleven_synth, is_available as eleven_ok,
+            )
+            from backend.services.tier_service import get_user_tier
+            if not eleven_ok():
+                raise HTTPException(400, "ElevenLabs not configured. Set ELEVENLABS_API_KEY.")
+            owner_id = song.project.user_id if song.project else None
+            if owner_id and get_user_tier(db, owner_id) != "pro":
+                raise HTTPException(
+                    402,
+                    "ElevenLabs voices are a Pro-tier feature. Upgrade or pick the default voice.",
+                )
+            vocal_path = eleven_synth(
+                target_lyrics,
+                voice_id=data.elevenlabs_voice_id,
+                quality=data.quality,
+            )
         else:
             # Local XTTS (default) — with optional voice cloning
             persona_voice_path = None
@@ -96,12 +128,17 @@ def generate_song(data: GenerateRequest, db: Session = Depends(get_db)):
                 persona_voice_path = data.voice_clip_path
                 persona_embedding = data.voice_clip_path
 
-            # Or use persona's stored voice
-            elif data.persona_id:
-                persona = db.query(Persona).filter(Persona.id == data.persona_id).first()
-                if persona:
-                    persona_voice_path = persona.voice_sample_path
-                    persona_embedding = persona.embedding_path
+            # Or use persona's stored voice (XTTS personas only — ElevenLabs
+            # personas were promoted to engine=elevenlabs at the top of try:)
+            elif persona_obj:
+                persona_voice_path = persona_obj.voice_sample_path
+                persona_embedding = persona_obj.embedding_path
+
+            # Voice described in natural language — record on the job for future
+            # preset-matching; falls back to default XTTS until preset library exists.
+            if data.voice_engine == "described" and data.voice_description:
+                job.params = {**(job.params or {}), "voice_description": data.voice_description}
+                db.flush()
 
             vocal_path = generate_vocal(
                 target_lyrics,
@@ -154,6 +191,9 @@ def generate_song(data: GenerateRequest, db: Session = Depends(get_db)):
 def list_available_voices():
     """List available voice engines and voices."""
     from backend.services.azure_tts_service import is_available as azure_ok, list_voices as azure_voices
+    from backend.services.elevenlabs_service import (
+        is_available as eleven_ok, list_voices as eleven_voices,
+    )
 
     engines = [
         {
@@ -162,6 +202,7 @@ def list_available_voices():
             "description": "Local neural TTS — runs on your GPU",
             "available": True,
             "voices": [],
+            "tier": "free",
         },
     ]
 
@@ -172,6 +213,17 @@ def list_available_voices():
             "description": "Microsoft Azure Neural TTS — cloud service",
             "available": True,
             "voices": azure_voices(),
+            "tier": "pro",
+        })
+
+    if eleven_ok():
+        engines.append({
+            "engine": "elevenlabs",
+            "name": "ElevenLabs (Studio)",
+            "description": "Premium expressive vocals — Pro tier",
+            "available": True,
+            "voices": eleven_voices(),
+            "tier": "pro",
         })
 
     engines.append({
@@ -180,9 +232,122 @@ def list_available_voices():
         "description": "Record 10-30s of your voice for cloning",
         "available": True,
         "voices": [],
+        "tier": "free",
     })
 
     return {"engines": engines}
+
+
+def _require_pro_or_402(db: Session, user_id: str | None) -> None:
+    """Raise 402 if the user_id isn't on the Pro tier (free / unknown blocked)."""
+    from backend.services.tier_service import get_user_tier
+    if not user_id:
+        raise HTTPException(401, "user_id required for ElevenLabs features")
+    if get_user_tier(db, user_id) != "pro":
+        raise HTTPException(402, "ElevenLabs is a Pro-tier feature.")
+
+
+@router.get("/elevenlabs/quota")
+def elevenlabs_quota():
+    """Surface ElevenLabs credit balance for the dashboard / sidebar."""
+    from backend.services.elevenlabs_service import get_quota
+    return get_quota()
+
+
+@router.post("/elevenlabs/clone")
+async def elevenlabs_clone(
+    voice_clip_path: str = Body(..., embed=True),
+    name: str = Body("MM-cloned", embed=True),
+    user_id: str = Body(..., embed=True),
+    db: Session = Depends(get_db),
+):
+    """Upload a voice reference to ElevenLabs Instant Voice Cloning.
+
+    Pro-tier only. The clip must already be a transcoded WAV on disk
+    (use /api/upload/voice-clip first).
+    """
+    _require_pro_or_402(db, user_id)
+    from backend.services.elevenlabs_service import clone_voice, is_available as eleven_ok
+    if not eleven_ok():
+        raise HTTPException(400, "ElevenLabs not configured.")
+    try:
+        voice_id = clone_voice(voice_clip_path, name=name)
+    except FileNotFoundError as e:
+        raise HTTPException(404, str(e))
+    except RuntimeError as e:
+        raise HTTPException(502, str(e))
+    return {"voice_id": voice_id, "name": name}
+
+
+@router.post("/elevenlabs/voice-design")
+def elevenlabs_voice_design(
+    description: str = Body(..., embed=True),
+    sample_text: str | None = Body(None, embed=True),
+    user_id: str = Body(..., embed=True),
+    db: Session = Depends(get_db),
+):
+    """Generate 3 preview voices from a natural-language description.
+
+    Pro-tier. Returns previews each with a `generated_voice_id` + base64
+    audio sample. Call /elevenlabs/voice-design/commit to persist the
+    chosen one to the user's voice library.
+    """
+    _require_pro_or_402(db, user_id)
+    from backend.services.elevenlabs_service import design_voice, is_available as eleven_ok
+    if not eleven_ok():
+        raise HTTPException(400, "ElevenLabs not configured.")
+    try:
+        kwargs = {"description": description}
+        if sample_text:
+            kwargs["sample_text"] = sample_text
+        return design_voice(**kwargs)
+    except RuntimeError as e:
+        raise HTTPException(502, str(e))
+
+
+@router.post("/elevenlabs/voice-design/commit")
+def elevenlabs_voice_design_commit(
+    generated_voice_id: str = Body(..., embed=True),
+    voice_name: str = Body(..., embed=True),
+    voice_description: str = Body(..., embed=True),
+    user_id: str = Body(..., embed=True),
+    db: Session = Depends(get_db),
+):
+    """Persist a designed-voice preview to the user's library, returns voice_id."""
+    _require_pro_or_402(db, user_id)
+    from backend.services.elevenlabs_service import commit_designed_voice, is_available as eleven_ok
+    if not eleven_ok():
+        raise HTTPException(400, "ElevenLabs not configured.")
+    try:
+        voice_id = commit_designed_voice(generated_voice_id, voice_name, voice_description)
+    except RuntimeError as e:
+        raise HTTPException(502, str(e))
+    return {"voice_id": voice_id, "name": voice_name}
+
+
+@router.post("/elevenlabs/speech-to-speech")
+def elevenlabs_sts(
+    source_audio_path: str = Body(..., embed=True),
+    target_voice_id: str = Body(..., embed=True),
+    quality: str = Body("draft", embed=True),
+    user_id: str = Body(..., embed=True),
+    db: Session = Depends(get_db),
+):
+    """Re-render a recorded vocal in a different ElevenLabs voice (Pro-tier).
+
+    Keeps the source's rhythm, cadence, and emotion — substitutes the timbre.
+    """
+    _require_pro_or_402(db, user_id)
+    from backend.services.elevenlabs_service import speech_to_speech, is_available as eleven_ok
+    if not eleven_ok():
+        raise HTTPException(400, "ElevenLabs not configured.")
+    try:
+        path = speech_to_speech(source_audio_path, target_voice_id, quality=quality)
+    except FileNotFoundError as e:
+        raise HTTPException(404, str(e))
+    except RuntimeError as e:
+        raise HTTPException(502, str(e))
+    return {"file_path": path, "target_voice_id": target_voice_id}
 
 
 @router.post("/lyrics")
@@ -193,6 +358,7 @@ def generate_lyrics_endpoint(data: GenerateLyricsRequest):
         genre=data.genre,
         mood=data.mood,
         quality=data.quality,
+        style_tags=data.style_tags,
     )
     return {"lyrics": lyrics}
 

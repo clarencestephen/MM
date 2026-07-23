@@ -76,14 +76,14 @@ export default function MMMStudioPage() {
       {/* Header */}
       <div className="mx-auto max-w-2xl px-5 pt-12 pb-8 sm:px-6">
         <div className="mb-1 flex items-center gap-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF6B35]">
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#B432FF]">
             MMMM
           </span>
         </div>
-        <h1 className="font-display text-[36px] font-light italic leading-tight tracking-tight text-[#F0EDE8]">
+        <h1 className="font-display text-[36px] font-light italic leading-tight tracking-tight text-[#E0D0F0]">
           Studio
         </h1>
-        <p className="mt-2 text-[13px] text-[#6B6560]">
+        <p className="mt-2 text-[13px] text-[#8A7FA8]">
           Record, layer, and transform sounds into songs. Hum a melody, tap a rhythm,
           describe the instrument — AI does the rest.
         </p>
@@ -95,14 +95,14 @@ export default function MMMStudioPage() {
           <button
             type="button"
             onClick={() => setShowCreate(true)}
-            className="mb-6 flex w-full items-center justify-center gap-2 rounded-xl border border-[#FF6B35]/20 bg-[#FF6B35]/[0.04] py-4 text-[13px] font-semibold text-[#FF6B35] transition hover:bg-[#FF6B35]/[0.08]"
+            className="mb-6 flex w-full items-center justify-center gap-2 rounded-xl border border-[#B432FF]/20 bg-[#B432FF]/[0.04] py-4 text-[13px] font-semibold text-[#B432FF] transition hover:bg-[#B432FF]/[0.08]"
           >
             <Plus className="h-4 w-4" />
             New Session
           </button>
         ) : (
-          <div className="mb-6 rounded-xl border border-[#1c1b18] bg-[#0a0a09] p-5">
-            <h3 className="mb-4 text-[13px] font-semibold text-[#F0EDE8]">New Studio Session</h3>
+          <div className="mb-6 rounded-xl border border-[#2A1A4A] bg-[#0D0A14] p-5">
+            <h3 className="mb-4 text-[13px] font-semibold text-[#E0D0F0]">New Studio Session</h3>
             <div className="space-y-3">
               <input
                 autoFocus
@@ -110,27 +110,27 @@ export default function MMMStudioPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Session name..."
-                className="w-full rounded-lg border border-[#1c1b18] bg-[#111110] px-4 py-2.5 text-[14px] text-[#F0EDE8] placeholder-[#3A3632] outline-none focus:border-[#FF6B35]/30"
+                className="w-full rounded-lg border border-[#2A1A4A] bg-[#1A0A2E] px-4 py-2.5 text-[14px] text-[#E0D0F0] placeholder-[#4A3F60] outline-none focus:border-[#B432FF]/30"
                 onKeyDown={(e) => e.key === "Enter" && handleCreate()}
               />
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#3A3632]">BPM</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#4A3F60]">BPM</label>
                   <input
                     type="number"
                     min={40}
                     max={300}
                     value={bpm}
                     onChange={(e) => setBpm(Number(e.target.value))}
-                    className="w-16 rounded-md border border-[#1c1b18] bg-[#111110] px-2 py-1.5 text-center text-[13px] font-mono text-[#F0EDE8] outline-none focus:border-[#FF6B35]/30"
+                    className="w-16 rounded-md border border-[#2A1A4A] bg-[#1A0A2E] px-2 py-1.5 text-center text-[13px] font-mono text-[#E0D0F0] outline-none focus:border-[#B432FF]/30"
                   />
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#3A3632]">Key</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#4A3F60]">Key</label>
                   <select
                     value={key}
                     onChange={(e) => setKey(e.target.value)}
-                    className="rounded-md border border-[#1c1b18] bg-[#111110] px-2 py-1.5 text-[13px] font-mono text-[#F0EDE8] outline-none focus:border-[#FF6B35]/30"
+                    className="rounded-md border border-[#2A1A4A] bg-[#1A0A2E] px-2 py-1.5 text-[13px] font-mono text-[#E0D0F0] outline-none focus:border-[#B432FF]/30"
                   >
                     {["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"].map((k) => (
                       <option key={k} value={k}>{k}</option>
@@ -143,7 +143,7 @@ export default function MMMStudioPage() {
                   type="button"
                   disabled={!title.trim() || creating}
                   onClick={handleCreate}
-                  className="flex items-center gap-2 rounded-lg bg-[#FF6B35] px-4 py-2 text-[12px] font-bold text-black transition hover:bg-[#FF8555] disabled:opacity-30"
+                  className="flex items-center gap-2 rounded-lg bg-[#B432FF] px-4 py-2 text-[12px] font-bold text-white transition hover:bg-[#C758FF] disabled:opacity-30"
                 >
                   {creating ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
                   Create
@@ -151,7 +151,7 @@ export default function MMMStudioPage() {
                 <button
                   type="button"
                   onClick={() => setShowCreate(false)}
-                  className="rounded-lg px-3 py-2 text-[12px] text-[#6B6560] hover:text-[#F0EDE8] transition"
+                  className="rounded-lg px-3 py-2 text-[12px] text-[#8A7FA8] hover:text-[#E0D0F0] transition"
                 >
                   Cancel
                 </button>
@@ -164,41 +164,41 @@ export default function MMMStudioPage() {
         {loading ? (
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-20 animate-pulse rounded-xl bg-[#0a0a09] border border-[#1c1b18]" />
+              <div key={i} className="h-20 animate-pulse rounded-xl bg-[#0D0A14] border border-[#2A1A4A]" />
             ))}
           </div>
         ) : sessions.length === 0 ? (
           <div className="flex flex-col items-center py-16">
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#0a0a09]">
-              <Music className="h-5 w-5 text-[#1c1b18]" />
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#0D0A14]">
+              <Music className="h-5 w-5 text-[#2A1A4A]" />
             </div>
-            <p className="text-[13px] text-[#3A3632]">No studio sessions yet</p>
-            <p className="mt-1 text-[11px] text-[#231F1C]">Create your first session to start making music</p>
+            <p className="text-[13px] text-[#4A3F60]">No studio sessions yet</p>
+            <p className="mt-1 text-[11px] text-[#2D2640]">Create your first session to start making music</p>
           </div>
         ) : (
           <div className="space-y-2">
             {sessions.map((s) => (
               <div
                 key={s.id}
-                className="group flex items-center gap-4 rounded-xl border border-[#1c1b18] bg-[#0a0a09] px-5 py-4 transition hover:border-[#2a2923] cursor-pointer"
+                className="group flex items-center gap-4 rounded-xl border border-[#2A1A4A] bg-[#0D0A14] px-5 py-4 transition hover:border-[#3D2466] cursor-pointer"
                 onClick={() => router.push(`/mmmm-studio/${s.id}`)}
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#FF6B35]/10">
-                  <Music className="h-4 w-4 text-[#FF6B35]" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#B432FF]/10">
+                  <Music className="h-4 w-4 text-[#B432FF]" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="truncate text-[14px] font-semibold text-[#F0EDE8]">
+                  <h3 className="truncate text-[14px] font-semibold text-[#E0D0F0]">
                     {s.title}
                   </h3>
-                  <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-[#6B6560]">
+                  <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-[#8A7FA8]">
                     <span>{s.track_count} tracks</span>
-                    <span className="text-[#3A3632]">·</span>
+                    <span className="text-[#4A3F60]">·</span>
                     <span>{s.bpm} BPM</span>
-                    <span className="text-[#3A3632]">·</span>
+                    <span className="text-[#4A3F60]">·</span>
                     <span>{s.key}</span>
                     {s.genre && (
                       <>
-                        <span className="text-[#3A3632]">·</span>
+                        <span className="text-[#4A3F60]">·</span>
                         <span>{s.genre.replace("_", " ")}</span>
                       </>
                     )}
@@ -212,11 +212,11 @@ export default function MMMStudioPage() {
                       await deleteStudioSession(s.id);
                       await loadSessions();
                     }}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[#231F1C] transition hover:text-red-500 opacity-0 group-hover:opacity-100"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[#2D2640] transition hover:text-red-500 opacity-0 group-hover:opacity-100"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
-                  <ArrowRight className="h-4 w-4 text-[#3A3632] group-hover:text-[#FF6B35] transition" />
+                  <ArrowRight className="h-4 w-4 text-[#4A3F60] group-hover:text-[#B432FF] transition" />
                 </div>
               </div>
             ))}

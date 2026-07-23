@@ -9,12 +9,24 @@ from backend.services.persona_service import save_voice_sample
 router = APIRouter(prefix="/personas", tags=["personas"])
 
 
-@router.post("/", response_model=PersonaResponse)
+@router.post("", response_model=PersonaResponse)
 def create_persona(data: PersonaCreate, db: Session = Depends(get_db)):
+    # Auto-create the user if it doesn't exist (matches the wizard's
+    # "default-user" convenience pattern used elsewhere)
+    from backend.models.user import User
+    user = db.query(User).filter(User.id == data.user_id).first()
+    if not user:
+        user = User(id=data.user_id, email=f"{data.user_id}@mm.local", display_name=data.user_id)
+        db.add(user)
+        db.flush()
+
     persona = Persona(
         name=data.name,
         description=data.description,
         style_mode=data.style_mode,
+        voice_engine=data.voice_engine or "xtts",
+        elevenlabs_voice_id=data.elevenlabs_voice_id,
+        voice_sample_path=data.voice_sample_path,
         user_id=data.user_id,
     )
     db.add(persona)
@@ -55,7 +67,7 @@ async def upload_voice_sample(
     }
 
 
-@router.get("/", response_model=list[PersonaResponse])
+@router.get("", response_model=list[PersonaResponse])
 def list_personas(user_id: str | None = None, db: Session = Depends(get_db)):
     q = db.query(Persona)
     if user_id:

@@ -213,7 +213,7 @@ export default function StudioSessionPage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-[#FF6B35]" />
+        <Loader2 className="h-6 w-6 animate-spin text-[#B432FF]" />
       </div>
     );
   }
@@ -221,11 +221,11 @@ export default function StudioSessionPage() {
   if (error || !session || !tierLimits) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4">
-        <p className="text-[14px] text-[#6B6560]">{error || "Session not found"}</p>
+        <p className="text-[14px] text-[#8A7FA8]">{error || "Session not found"}</p>
         <button
           type="button"
           onClick={() => router.push("/mmmm-studio")}
-          className="flex items-center gap-2 text-[12px] text-[#FF6B35] hover:underline"
+          className="flex items-center gap-2 text-[12px] text-[#B432FF] hover:underline"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Studio
@@ -250,32 +250,32 @@ export default function StudioSessionPage() {
 
       {/* Action feedback toast */}
       {actionFeedback && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 rounded-xl bg-[#111110] border border-[#1c1b18] px-5 py-2.5 text-[13px] font-semibold text-[#F0EDE8] shadow-xl animate-fade-up">
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 rounded-xl bg-[#1A0A2E] border border-[#2A1A4A] px-5 py-2.5 text-[13px] font-semibold text-[#E0D0F0] shadow-xl animate-fade-up">
           {actionFeedback}
         </div>
       )}
 
       {/* Top bar */}
-      <div className="sticky top-11 z-20 border-b border-[#1c1b18] bg-black/80 backdrop-blur-xl">
+      <div className="sticky top-11 z-20 border-b border-[#2A1A4A] bg-[#07060B]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-5 py-2.5 sm:px-6">
           <button
             type="button"
             onClick={() => router.push("/mmmm-studio")}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#6B6560] hover:text-[#F0EDE8] transition"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#8A7FA8] hover:text-[#E0D0F0] transition"
           >
             <ArrowLeft className="h-4 w-4" />
           </button>
 
           <div className="flex-1 min-w-0">
-            <h1 className="truncate text-[15px] font-semibold text-[#F0EDE8]">
+            <h1 className="truncate text-[15px] font-semibold text-[#E0D0F0]">
               {session.title}
             </h1>
-            <div className="flex items-center gap-1.5 text-[10px] text-[#3A3632]">
+            <div className="flex items-center gap-1.5 text-[10px] text-[#4A3F60]">
               <span>MMMM Studio</span>
               {saving && (
                 <>
                   <span>·</span>
-                  <span className="flex items-center gap-1 text-[#FF6B35]">
+                  <span className="flex items-center gap-1 text-[#B432FF]">
                     <Save className="h-2.5 w-2.5" /> Saving...
                   </span>
                 </>
@@ -305,7 +305,7 @@ export default function StudioSessionPage() {
           <button
             type="button"
             onClick={handleQuickRecord}
-            className="flex items-center gap-2 rounded-xl bg-[#FF2D2D]/10 border border-[#FF2D2D]/20 px-4 py-2.5 text-[12px] font-semibold text-[#FF2D2D] transition hover:bg-[#FF2D2D]/15 active:scale-95"
+            className="flex items-center gap-2 rounded-xl bg-[#FF3388]/10 border border-[#FF3388]/20 px-4 py-2.5 text-[12px] font-semibold text-[#FF3388] transition hover:bg-[#FF3388]/15 active:scale-95"
           >
             <Mic className="h-4 w-4" />
             Record
@@ -337,7 +337,7 @@ export default function StudioSessionPage() {
             <button
               type="button"
               onClick={handleExport}
-              className="ml-auto flex items-center gap-2 rounded-xl bg-[#FF6B35] px-4 py-2.5 text-[12px] font-bold text-black transition hover:bg-[#FF8555] active:scale-95"
+              className="ml-auto flex items-center gap-2 rounded-xl bg-[#B432FF] px-4 py-2.5 text-[12px] font-bold text-white transition hover:bg-[#C758FF] active:scale-95"
             >
               <Download className="h-4 w-4" />
               Export
@@ -376,8 +376,8 @@ export default function StudioSessionPage() {
         {/* Empty state — guide the user */}
         {!hasTracks && !showRecorder && !showSamples && (
           <div className="mt-8 flex flex-col items-center text-center">
-            <p className="text-[15px] text-[#6B6560] max-w-sm leading-relaxed">
-              Tap <span className="font-semibold text-[#FF2D2D]">Record</span> and hum, sing, tap, or beatbox.
+            <p className="text-[15px] text-[#8A7FA8] max-w-sm leading-relaxed">
+              Tap <span className="font-semibold text-[#FF3388]">Record</span> and hum, sing, tap, or beatbox.
               Then pick what instrument it should be.
               Add more layers to build your song!
             </p>

@@ -141,10 +141,10 @@ export default function MultiTrackEditor({
 
       {/* Track lanes */}
       {tracks.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[#1c1b18] bg-[#0a0a09] py-16">
-          <Music className="mb-3 h-8 w-8 text-[#1c1b18]" />
-          <p className="text-[13px] text-[#3A3632]">No tracks yet</p>
-          <p className="mt-1 text-[11px] text-[#231F1C]">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[#2A1A4A] bg-[#0D0A14] py-16">
+          <Music className="mb-3 h-8 w-8 text-[#2A1A4A]" />
+          <p className="text-[13px] text-[#4A3F60]">No tracks yet</p>
+          <p className="mt-1 text-[11px] text-[#2D2640]">
             Record your voice, upload audio, or connect a MIDI controller
           </p>
         </div>
@@ -184,12 +184,12 @@ export default function MultiTrackEditor({
         <button
           type="button"
           onClick={() => setShowAddMenu(!showAddMenu)}
-          className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-[#1c1b18] bg-[#0a0a09] py-3 text-[12px] font-medium text-[#3A3632] transition hover:border-[#FF6B35]/30 hover:text-[#FF6B35]"
+          className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-[#2A1A4A] bg-[#0D0A14] py-3 text-[12px] font-medium text-[#4A3F60] transition hover:border-[#B432FF]/30 hover:text-[#B432FF]"
         >
           <Plus className="h-3.5 w-3.5" />
           Add Track
           {atLimit && tierLimits.tier === "free" && (
-            <span className="ml-1 rounded-md bg-[#FF6B35]/10 px-1.5 py-0.5 text-[9px] font-bold text-[#FF6B35]">
+            <span className="ml-1 rounded-md bg-[#B432FF]/10 px-1.5 py-0.5 text-[9px] font-bold text-[#B432FF]">
               PRO
             </span>
           )}
@@ -197,34 +197,34 @@ export default function MultiTrackEditor({
 
         {/* Dropdown menu */}
         {showAddMenu && (
-          <div className="absolute top-full left-0 right-0 z-10 mt-1 rounded-xl border border-[#1c1b18] bg-[#0a0a09] p-1 shadow-xl">
+          <div className="absolute top-full left-0 right-0 z-10 mt-1 rounded-xl border border-[#2A1A4A] bg-[#0D0A14] p-1 shadow-xl">
             <button
               type="button"
               onClick={() => handleAddTrack("recording")}
-              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-[12px] text-[#6B6560] transition hover:bg-[#111110] hover:text-[#F0EDE8]"
+              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-[12px] text-[#8A7FA8] transition hover:bg-[#1A0A2E] hover:text-[#E0D0F0]"
             >
-              <Mic className="h-3.5 w-3.5 text-[#FF2D2D]" />
+              <Mic className="h-3.5 w-3.5 text-[#FF3388]" />
               Record audio
-              <span className="ml-auto text-[10px] text-[#3A3632]">Mic input</span>
+              <span className="ml-auto text-[10px] text-[#4A3F60]">Mic input</span>
             </button>
             <button
               type="button"
               onClick={() => handleAddTrack("import")}
-              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-[12px] text-[#6B6560] transition hover:bg-[#111110] hover:text-[#F0EDE8]"
+              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-[12px] text-[#8A7FA8] transition hover:bg-[#1A0A2E] hover:text-[#E0D0F0]"
             >
               <Upload className="h-3.5 w-3.5 text-[#3b82f6]" />
               Upload file
-              <span className="ml-auto text-[10px] text-[#3A3632]">WAV, MP3, etc.</span>
+              <span className="ml-auto text-[10px] text-[#4A3F60]">WAV, MP3, etc.</span>
             </button>
           </div>
         )}
       </div>
 
       {/* Track count */}
-      <div className="flex items-center justify-between text-[10px] text-[#3A3632]">
+      <div className="flex items-center justify-between text-[10px] text-[#4A3F60]">
         <span>{tracks.length} / {maxTracks === 999 ? "∞" : maxTracks} tracks</span>
         {tierLimits.tier === "free" && (
-          <span className="text-[#FF6B35]">Free plan — upgrade for more</span>
+          <span className="text-[#B432FF]">Free plan — upgrade for more</span>
         )}
       </div>
     </div>
