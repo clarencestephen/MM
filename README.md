@@ -27,7 +27,7 @@ Everything runs locally. No cloud APIs, no subscriptions, no data leaves your ma
 ## Quick start
 
 ```bash
-# 1. Clone (private repo — requires access)
+# 1. Clone
 git clone https://github.com/clarencestephen/MM.git && cd MM
 
 # 2. Install Ollama + pull the LLM
@@ -77,6 +77,10 @@ Optimized for Hip Hop, Melodic Rap, R&B, and Lo-fi. Not trying to be "all music.
 
 The wedge is **editability + transformation + vocal identity**, not generic text-to-song.
 
+## Contributing
+
+Issues and pull requests are welcome. Keep the local-first, zero-cloud-API principle intact.
+
 ## License
 
-Proprietary. All rights reserved. This code is private and confidential.
+[MIT](LICENSE) © 2026 Clarence Stephen

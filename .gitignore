@@ -61,3 +61,10 @@ alembic/versions/*.py
 checkpoints/
 storage/
 mm_dev.db
+
+# Local dev artifacts
+*.db
+.claude/
+*:Zone.Identifier
+.next/
+.pytest_cache/

@@ -1,11 +1,11 @@
 # MM
 
-AI-native Hip Hop music creation platform. **100% local. Zero API calls. Proprietary — private repo.**
+AI-native Hip Hop music creation platform. **100% local. Zero API calls. Open source (MIT).**
 
 ## Philosophy
 - This is a LOCAL-FIRST application. Everything runs on your machine.
 - Zero external API calls. No OpenAI, no Anthropic, no cloud TTS.
-- **PROPRIETARY CODE** — private GitHub repo, no public access, no open-source license.
+- **Open source (MIT)** — public GitHub repo. Never commit secrets, credentials, or personal paths; read them from env vars.
 - VPS deployment is optional/later.
 - Genre focus: Hip Hop, Melodic Rap, R&B, Lo-fi. No all-genre abstractions.
 - Wedge: editability + transformation + identity, NOT generic text-to-song.

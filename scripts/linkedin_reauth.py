@@ -10,12 +10,14 @@ from pathlib import Path
 from datetime import datetime, timezone
 from urllib.parse import urlencode, urlparse, parse_qs
 
+import os
+
 import requests
 
-CLIENT_ID = "***REMOVED***"
-CLIENT_SECRET = "***REMOVED***="
+CLIENT_ID = os.environ["LINKEDIN_CLIENT_ID"]
+CLIENT_SECRET = os.environ["LINKEDIN_CLIENT_SECRET"]
 REDIRECT_URI = "http://localhost:8888/callback"
-CREDENTIALS_FILE = Path("linkedin_credentials.json")
+CREDENTIALS_FILE = Path(os.environ.get("LINKEDIN_CREDENTIALS_FILE", "linkedin_credentials.json"))
 SCOPES = "openid profile w_member_social r_member_social"
 
 
